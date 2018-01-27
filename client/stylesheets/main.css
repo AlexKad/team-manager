@@ -1,0 +1,27 @@
+/* common */
+body{
+  font-family: sans-serif;
+}
+input, select{
+  padding:5px;
+  border-radius: 5px;
+  outline: none;
+}
+select{
+  width:140px;
+  padding: 10px;
+  font-size:16px;
+}
+button{
+  padding: 7px 18px;
+  margin: 10px 7px;
+  cursor: pointer;
+  color: whitesmoke;
+  background: #5582c8;
+  font-size: 16px;
+  outline: none;
+}
+button i.fa {
+  margin: 0 3px;
+  font-size: 16px;
+}
