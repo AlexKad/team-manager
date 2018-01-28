@@ -10,8 +10,9 @@ export default class Dropdown extends React.Component{
     this.props.onChange(e.target.value);
   }
   render(){
-    let { items, selected } = this.props;
-    let options = items.map(el => <option key={el.id}>{el.name}</option>);
+    let { items, selected, idField } = this.props;
+    idField = idField || 'id';
+    let options = items.map(el => <option key={el[idField]}>{el.name}</option>);
 
     return <select onChange={this.onChange} value={selected}>
       {options}

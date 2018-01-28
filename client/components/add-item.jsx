@@ -31,8 +31,8 @@ class AddItem extends React.Component{
     let currTime = new Date();
     let task = {
       name: this.taskName.value,
-      type: type || 'task',
-      priority: priority || 'Medium',
+      type: type,
+      priority: priority,
       assignedTo: assignedTo,
       status: statuses[0].name,
       dateOpened: currTime,
@@ -60,7 +60,7 @@ class AddItem extends React.Component{
       priority: priority[0].id,
       //TODO:
       //iteration: iteration[0].id,
-      assignedTo: teamMembers[0].id
+      assignedTo: teamMembers.length? teamMembers[0].id : null
     });
   }
   onTypeChanged(type){ this.setState({type}); }
@@ -99,7 +99,7 @@ class AddItem extends React.Component{
           </div>
           <div>
             <label>Assign To</label>
-            <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={teamMembers[0].id}/>
+            <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={teamMembers.length? teamMembers[0]._id: ''} idField="_id"/>
           </div>
         </div>
 
@@ -119,11 +119,6 @@ class AddItem extends React.Component{
   }
 }
 export default withTracker(props => {
-  //TODO: read team from DB
-  //let teamMembers = TeamMembers.find().fetch();
-  let teamMembers = [
-    { id: 1, name: 'A'},
-    { id: 2, name: 'B'}
-  ];
+  let teamMembers = TeamMembers.find().fetch() || [];
   return { teamMembers };
 })(AddItem);
