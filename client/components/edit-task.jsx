@@ -4,7 +4,7 @@ import Dropdown from './dropdown';
 import { TeamMembers } from '../../imports/collections.js';
 import { types, statuses, priority } from '../constants.js';
 
-class AddItem extends React.Component{
+class EditTask extends React.Component{
   constructor(props){
     super(props);
     this.state = {
@@ -121,4 +121,4 @@ class AddItem extends React.Component{
 export default withTracker(props => {
   let teamMembers = TeamMembers.find().fetch() || [];
   return { teamMembers };
-})(AddItem);
+})(EditTask);

@@ -33,7 +33,8 @@ class EditTeam extends React.Component{
   render(){
     let {team} = this.props;
 
-    return <div>
+    return <div className="edit-team">
+      <h4>Team</h4>
       { team.map(el=> this.renderMember(el) ) }
       <input placeholder="John Smith" ref={ x=> this.nameInput = x }/>
       <button onClick={this.onSave}>Save</button>

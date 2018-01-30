@@ -8,6 +8,11 @@ class TasksGrid extends React.Component{
   constructor(props){
     super(props);
     this.state = {};
+    this.onRowClick = this.onRowClick.bind(this);
+  }
+  onRowClick(rowInfo){
+    console.log('on task clicked');
+    this.props.onTaskClick(rowInfo.original._id);
   }
   renderGrid(){
         let noFilter = () => null;
@@ -16,10 +21,6 @@ class TasksGrid extends React.Component{
           Header:'Type',
           accessor:'type'
         },
-        // {
-        //   Header:'Description',
-        //   accessor:'description'
-        // },
         {
           Header: 'Name',
           accessor: 'name'
@@ -50,8 +51,17 @@ class TasksGrid extends React.Component{
         }
       ];
 
-        return <ReactTable filterable data={this.props.tasks} columns={columns}
+      let events = (state, rowInfo, column, instance)=>{
+        return {
+          onClick: (e)=> this.onRowClick(rowInfo)
+        }
+      }
+      let tasks = this.props.tasks;
+      let defaultPageSize = tasks.length < 10? 10 : (tasks.length>20? tasks.length : 20);
+
+      return <ReactTable filterable data={tasks} columns={columns}
           defaultFilterMethod={(filter,row) => row[filter.id].includes(filter.value)}
+          defaultPageSize={defaultPageSize} getTrProps={events}
           noDataText='No tasks or bugs found' />;
 
   }
