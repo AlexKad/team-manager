@@ -1,6 +1,7 @@
-.sprint-plan{
+.sprint{
   margin: 15px 0;
 }
+.sprint-dashboard,
 .sprint-plan-board{
   display: flex;
   flex-direction: row;
@@ -10,6 +11,11 @@
     flex-direction: column;
     padding: 10px;
     flex: 1;
+  }
+  &>div.buttons{
+    flex:0;
+    margin-top: 150px;
+    button{ width: 100px; }
   }
 
   .task{
