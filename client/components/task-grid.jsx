@@ -11,7 +11,6 @@ class TasksGrid extends React.Component{
     this.onRowClick = this.onRowClick.bind(this);
   }
   onRowClick(rowInfo){
-    console.log('on task clicked');
     this.props.onTaskClick(rowInfo.original._id);
   }
   renderGrid(){

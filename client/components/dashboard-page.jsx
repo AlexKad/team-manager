@@ -4,6 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import TasksGrid from './task-grid';
 import EditTask from './edit-task';
 import EditTeam from './edit-team';
+import PlanSprintBoard from './plan-sprint';
 
 class DashboardPage extends React.Component{
   constructor(props){
@@ -20,6 +21,7 @@ class DashboardPage extends React.Component{
       <EditTask />
       <EditTeam />
       <TasksGrid onTaskClick={this.openTaskDetails}/>
+      <PlanSprintBoard iteration="future iterations"></PlanSprintBoard>
     </div>;
  }
 }
