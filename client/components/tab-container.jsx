@@ -25,7 +25,7 @@ export class TabContainer extends React.Component {
   }
   _renderCurrentTabContent() {
     const { selectedIndex } = this.state;
-    return this.props.children[selectedIndex];
+    return <div className="current-tab">{this.props.children[selectedIndex]}</div>;
   }
   render() {
     return (
