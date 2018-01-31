@@ -1,7 +1,7 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import Dropdown from './dropdown';
-import { TeamMembers } from '../../imports/collections.js';
+import { TeamMembers, Iterations } from '../../imports/collections.js';
 import { types, statuses, priority } from '../constants.js';
 
 class EditTask extends React.Component{
@@ -58,8 +58,7 @@ class EditTask extends React.Component{
     this.setState({
       type: types[0].id,
       priority: priority[0].id,
-      //TODO:
-      //iteration: iteration[0].id,
+      iteration: Iteration[0],
       assignedTo: teamMembers.length? teamMembers[0].id : null
     });
   }
@@ -70,12 +69,7 @@ class EditTask extends React.Component{
 
   render(){
     let teamMembers = this.props.teamMembers;
-
-    //TODO: calculate current sprint
-    let sprints = [
-      { id: 'current', name: 'current sprint' },
-      { id: 'future', name: 'future iterations'}
-    ]
+    let sprints = Iterations.map(el=> {return { id: el, name: el} });
 
     return <div className='edit-task'>
       <button onClick={this.onAddClick}><i className='fa fa-plus-circle'></i>Add new</button>

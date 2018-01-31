@@ -6,6 +6,7 @@ import EditTask from './edit-task';
 import EditTeam from './edit-team';
 import SprintDashboard from './sprint-dashboard';
 import PlanSprintBoard from './plan-sprint';
+import { Iterations } from '../../imports/collections.js';
 
 class DashboardPage extends React.Component{
   constructor(props){
@@ -22,8 +23,8 @@ class DashboardPage extends React.Component{
       <EditTask />
       <EditTeam />
       {/* <TasksGrid onTaskClick={this.openTaskDetails}/> */}
-      {/* <SprintDashboard iteration="future iterations"></SprintDashboard> */}
-      <PlanSprintBoard iteration="future iterations"></PlanSprintBoard>
+      {/* <SprintDashboard iteration="current sprint"></SprintDashboard> */}
+      <PlanSprintBoard iteration={Iterations[0]}></PlanSprintBoard>
     </div>;
  }
 }
