@@ -6,6 +6,7 @@ import EditTask from './edit-task';
 import EditTeam from './edit-team';
 import SprintDashboard from './sprint-dashboard';
 import PlanSprintBoard from './plan-sprint';
+import { TabContainer, Tab } from './tab-container';
 import { Iterations } from '../../imports/collections.js';
 
 class DashboardPage extends React.Component{
@@ -21,10 +22,22 @@ class DashboardPage extends React.Component{
     return <div className='dashboard-page'>
       <div><h2>Team Task Manager</h2></div>
       <EditTask />
-      <EditTeam />
-      {/* <TasksGrid onTaskClick={this.openTaskDetails}/> */}
-      {/* <SprintDashboard iteration="current sprint"></SprintDashboard> */}
-      <PlanSprintBoard iteration={Iterations[0]}></PlanSprintBoard>
+
+      <TabContainer>
+        <Tab title="Current Sprint">
+          <SprintDashboard iteration={Iterations[0]}></SprintDashboard>
+        </Tab>
+        <Tab title="Plan Next Sprint">
+          <PlanSprintBoard iteration={Iterations[1]}></PlanSprintBoard>
+        </Tab>
+        <Tab title="Team Workload">
+          <EditTeam />
+          {/* TODO: add workload chart */}
+        </Tab>
+        <Tab title="All tasks">
+          <TasksGrid onTaskClick={this.openTaskDetails}/>
+        </Tab>
+      </TabContainer>
     </div>;
  }
 }

@@ -58,7 +58,7 @@ class EditTask extends React.Component{
     this.setState({
       type: types[0].id,
       priority: priority[0].id,
-      iteration: Iteration[0],
+      iteration: Iterations[0],
       assignedTo: teamMembers.length? teamMembers[0].id : null
     });
   }
