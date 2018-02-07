@@ -1,8 +1,10 @@
-.sprint{
-  margin: 15px 0;
+.sprint,
+.plan-sprint{
+  margin: 10px 0;
+  padding: 20px;
 }
 .sprint-dashboard,
-.sprint-plan-board{
+.plan-sprint-board{
   display: flex;
   flex-direction: row;
 
@@ -10,12 +12,25 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
+    text-align: center;
     flex: 1;
   }
   &>div.buttons{
     flex:0;
     margin-top: 150px;
     button{ width: 100px; }
+  }
+
+  .box{
+    border: 1px dashed #999;
+    min-height: 400px;
+    max-height: 430px;
+    overflow: scroll;
+
+     &.middle{
+       border-left:0px;
+       border-right:0px;
+     }
   }
 
   .task{

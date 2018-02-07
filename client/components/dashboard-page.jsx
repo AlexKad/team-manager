@@ -30,7 +30,7 @@ class DashboardPage extends React.Component{
         <Tab title="Plan Next Sprint">
           <PlanSprintBoard iteration={Iterations[1]}></PlanSprintBoard>
         </Tab>
-        <Tab title="Team Workload">
+        <Tab title="Team & Workload">
           <EditTeam />
           {/* TODO: add workload chart */}
         </Tab>

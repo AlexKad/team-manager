@@ -65,7 +65,7 @@ class TasksGrid extends React.Component{
 
   }
   render(){
-    return <div>
+    return <div className="tasks-grid">
       { this.renderGrid() }
     </div>
   }

@@ -23,10 +23,10 @@ class PlanSprintBoard extends React.Component{
 
     //TODO: add 'move many' button
     //TODO: implement drag n drop
-    return <div className='sprint-plan'>
+    return <div className='plan-sprint'>
       <h2>Planning Tasks for {this.props.iteration}</h2>
-      <div className='sprint-plan-board'>
-        <div className='todo'>
+      <div className='plan-sprint-board'>
+        <div className='todo box'>
           <h3>Backlog</h3>
           { backLog.map(el=> this.renderTask(el)) }
         </div>
@@ -34,7 +34,7 @@ class PlanSprintBoard extends React.Component{
           <button> -&gt; </button>
           <button> &lt;- </button>
         </div>
-        <div className='in-progress'>
+        <div className='in-progress box'>
           <h3>{this.props.iteration}</h3>
           { current.map(el=> this.renderTask(el)) }
         </div>

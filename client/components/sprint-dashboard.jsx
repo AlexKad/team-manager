@@ -27,15 +27,15 @@ class SprintDashboard extends React.Component{
     return <div className='sprint'>
       <h2>{this.props.iteration}</h2>
       <div className='sprint-dashboard'>
-        <div className='todo'>
+        <div className='todo box'>
           <h3>TO DO</h3>
           { todo.map(el=> this.renderTask(el)) }
         </div>
-        <div className='in-progress'>
+        <div className='in-progress middle box'>
           <h3>In Progress</h3>
           { inprogress.map(el=> this.renderTask(el)) }
         </div>
-        <div className='done'>
+        <div className='done box'>
           <h3>Done</h3>
           { done.map(el=> this.renderTask(el)) }
         </div>
