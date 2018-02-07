@@ -12,6 +12,7 @@ class SprintDashboard extends React.Component{
   renderTask(task){
     return <div className='task' key={task._id}>
       <h4>{task.name}</h4>
+      <span>{task.iteration}</span><br/>
       <span>Assigned to: {task.assignedTo}</span>
     </div>
   }

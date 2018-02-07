@@ -13,7 +13,7 @@ class EditTask extends React.Component{
       priority: priority[0].name,
       //TODO: read iterations
       iteration: '',
-      assignedTo:''
+      assignedTo: ''
     };
     this.onAddClick = this.onAddClick.bind(this);
     this.onSave = this.onSave.bind(this);
@@ -23,11 +23,18 @@ class EditTask extends React.Component{
     this.onAssignedToChanged = this.onAssignedToChanged.bind(this);
     this.onIterationChanged = this.onIterationChanged.bind(this);
   }
+  componentWillReceiveProps(nextProps) {
+    let teamMembers = nextProps.teamMembers;
+    if(teamMembers.length && this.props.teamMembers.length != teamMembers.length){
+      this.setState({assignedTo: teamMembers[0].id })
+    }
+  }
   onAddClick(){
     this.setState({showForm: true});
   }
   onSave(){
     let { type, priority, assignedTo, iteration } = this.state;
+    console.log(this.state);
     let currTime = new Date();
     let task = {
       name: this.taskName.value,
@@ -93,7 +100,7 @@ class EditTask extends React.Component{
           </div>
           <div>
             <label>Assign To</label>
-            <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={teamMembers.length? teamMembers[0]._id: ''} idField="_id"/>
+            <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={teamMembers.length? teamMembers[0].id: ''}/>
           </div>
         </div>
 
@@ -114,5 +121,6 @@ class EditTask extends React.Component{
 }
 export default withTracker(props => {
   let teamMembers = TeamMembers.find().fetch() || [];
+  teamMembers = teamMembers.map(el=>{ return {id: el._id, name: el.name} });
   return { teamMembers };
 })(EditTask);
