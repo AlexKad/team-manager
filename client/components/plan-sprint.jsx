@@ -3,28 +3,13 @@ import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Tasks, TeamMembers } from '../../imports/collections.js';
 import { types, status, priority } from '../constants.js';
+import Task from './task';
 import Dropdown from './dropdown';
 
 class PlanSprintBoard extends React.Component{
   constructor(props){
     super(props);
     this.state = { };
-    this.assignedToChanged = this.assignedToChanged.bind(this);
-  }
-  assignedToChanged(taskId, assignedTo){
-
-  }
-  renderTask(task){
-    //TODO: add checkbox
-    let teamList = this.props.teamList;
-
-
-    return <div className='task' key={task._id}>
-      <h4>{task.name}</h4>
-      <span>Assigned to:
-        <Dropdown items={teamList} onChange={(id)=> this.assignedToChanged(task._id, id)} selected={task.assignedTo}/>
-      </span>
-    </div>
   }
   render(){
     let { tasks, iteration }= this.props;
@@ -38,7 +23,7 @@ class PlanSprintBoard extends React.Component{
       <div className='plan-sprint-board'>
         <div className='todo box'>
           <h3>Backlog</h3>
-          { backLog.map(el=> this.renderTask(el)) }
+          { backLog.map(el=> <Task task={el} key={el._id}/>) }
         </div>
         <div className='buttons'>
           <button> -&gt; </button>
@@ -46,7 +31,7 @@ class PlanSprintBoard extends React.Component{
         </div>
         <div className='in-progress box'>
           <h3>{this.props.iteration}</h3>
-          { current.map(el=> this.renderTask(el)) }
+          { current.map(el=> <Task task={el} key={el._id}/>) }
         </div>
       </div>
     </div>
@@ -54,9 +39,6 @@ class PlanSprintBoard extends React.Component{
 }
 
 export default withTracker(props=>{
-  let team = TeamMembers.find().fetch() || [];
   let tasks = Tasks.find({ status: status.OPEN }).fetch() || [];
-  let teamList =  team.map(el=>{ return {id: el._id, name: el.name} });
-  teamList.push({id:'', name:''});
-  return { team, tasks, teamList };
+  return { tasks };
 })(PlanSprintBoard)
