@@ -72,9 +72,15 @@ class EditTask extends React.Component{
     let { teamMembers, sprints } = this.props;
 
     return <div className='edit-task'>
-      <button onClick={this.onAddClick}><i className='fa fa-plus-circle'></i>Add new</button>
+      {this.state.showForm? '' : <button onClick={this.onAddClick}><i className='fa fa-plus-circle'></i>Add new</button> }
       {this.state.showForm?
       <div className="edit-block">
+
+        <div className='form-group long'>
+          <label>Name</label>
+          <input id='name' ref={(x)=> this.taskName = x}></input>
+        </div>
+
         <div className='form-group'>
           <div>
             <label>Type</label>
@@ -95,11 +101,6 @@ class EditTask extends React.Component{
             <label>Assign To</label>
             <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={''}/>
           </div>
-        </div>
-
-        <div className='form-group'>
-          <label>Name</label>
-          <input id='name' ref={(x)=> this.taskName = x}></input>
         </div>
 
         <div className='buttons'>
