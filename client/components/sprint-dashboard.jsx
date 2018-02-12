@@ -3,13 +3,19 @@ import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Tasks, TeamMembers } from '../../imports/collections.js';
 import { types, status, priority } from '../constants.js';
+import Dropdown from './dropdown';
 
 class SprintDashboard extends React.Component{
   constructor(props){
     super(props);
     this.state = { };
+    this.assignedToChanged = this.assignedToChanged.bind(this);
+  }
+  assignedToChanged(taskId, assignedTo){
+
   }
   renderTask(task){
+    let teamList = this.props.teamList;
     let personName = '';
     if(task.assignedTo){
       let member = TeamMembers.findOne(task.assignedTo);
@@ -19,7 +25,9 @@ class SprintDashboard extends React.Component{
     return <div className='task' key={task._id}>
       <h4>{task.name}</h4>
       <span>{task.iteration}</span><br/>
-      <span>Assigned to: {personName}</span>
+      <span>Assigned to:
+        <Dropdown items={teamList} onChange={(id)=> this.assignedToChanged(task._id, id)} selected={task.assignedTo}/>
+      </span>
     </div>
   }
   render(){
@@ -54,5 +62,7 @@ class SprintDashboard extends React.Component{
 export default withTracker(props=>{
   let team = TeamMembers.find().fetch() || [];
   let tasks = Tasks.find({ iteration: props.iteration }).fetch() || [];
-  return { team, tasks };
+  let teamList =  team.map(el=>{ return {id: el._id, name: el.name} });
+  teamList.push({id:'', name:''});
+  return { team, tasks, teamList };
 })(SprintDashboard)

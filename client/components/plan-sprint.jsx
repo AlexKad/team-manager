@@ -3,23 +3,27 @@ import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Tasks, TeamMembers } from '../../imports/collections.js';
 import { types, status, priority } from '../constants.js';
+import Dropdown from './dropdown';
 
 class PlanSprintBoard extends React.Component{
   constructor(props){
     super(props);
     this.state = { };
+    this.assignedToChanged = this.assignedToChanged.bind(this);
+  }
+  assignedToChanged(taskId, assignedTo){
+
   }
   renderTask(task){
     //TODO: add checkbox
-    let personName = '';
-    if(task.assignedTo){
-      let member = TeamMembers.findOne(task.assignedTo);
-      if(member) personName = member.name;
-    }
+    let teamList = this.props.teamList;
+
 
     return <div className='task' key={task._id}>
       <h4>{task.name}</h4>
-      <span>Assigned to: {personName}</span>
+      <span>Assigned to:
+        <Dropdown items={teamList} onChange={(id)=> this.assignedToChanged(task._id, id)} selected={task.assignedTo}/>
+      </span>
     </div>
   }
   render(){
@@ -52,5 +56,7 @@ class PlanSprintBoard extends React.Component{
 export default withTracker(props=>{
   let team = TeamMembers.find().fetch() || [];
   let tasks = Tasks.find({ status: status.OPEN }).fetch() || [];
-  return { team, tasks };
+  let teamList =  team.map(el=>{ return {id: el._id, name: el.name} });
+  teamList.push({id:'', name:''});
+  return { team, tasks, teamList };
 })(PlanSprintBoard)

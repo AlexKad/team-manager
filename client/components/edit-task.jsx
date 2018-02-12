@@ -116,7 +116,7 @@ class EditTask extends React.Component{
 export default withTracker(props => {
   let teamMembers = TeamMembers.find().fetch() || [];
   teamMembers = teamMembers.map(el=>{ return {id: el._id, name: el.name} });
-  teamMembers.push({id:'', name:''})
+  teamMembers.push({id:'', name:''});
   let sprints = Iterations.map(el=> {return { id: el, name: el} });
   return { teamMembers, sprints };
 })(EditTask);
