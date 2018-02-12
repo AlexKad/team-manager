@@ -2,17 +2,17 @@ import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import Dropdown from './dropdown';
 import { TeamMembers, Iterations } from '../../imports/collections.js';
-import { types, statuses, priority } from '../constants.js';
+import { types, status, priority } from '../constants.js';
+import helper from '../helper.js';
 
 class EditTask extends React.Component{
   constructor(props){
     super(props);
     this.state = {
       showForm: false,
-      type: types[0].name,
-      priority: priority[0].name,
-      //TODO: read iterations
-      iteration: '',
+      type: types.TASK,
+      priority: priority.MEDIUM,
+      iteration: props.sprints[0].id,
       assignedTo: ''
     };
     this.onAddClick = this.onAddClick.bind(this);
@@ -23,25 +23,19 @@ class EditTask extends React.Component{
     this.onAssignedToChanged = this.onAssignedToChanged.bind(this);
     this.onIterationChanged = this.onIterationChanged.bind(this);
   }
-  componentWillReceiveProps(nextProps) {
-    let teamMembers = nextProps.teamMembers;
-    if(teamMembers.length && this.props.teamMembers.length != teamMembers.length){
-      this.setState({assignedTo: teamMembers[0].id })
-    }
-  }
   onAddClick(){
     this.setState({showForm: true});
   }
   onSave(){
     let { type, priority, assignedTo, iteration } = this.state;
-    console.log(this.state);
+
     let currTime = new Date();
     let task = {
       name: this.taskName.value,
       type: type,
       priority: priority,
       assignedTo: assignedTo,
-      status: statuses[0].name,
+      status: status.OPEN,
       dateOpened: currTime,
       dateClosed: null,
       iteration: iteration,
@@ -61,11 +55,11 @@ class EditTask extends React.Component{
     this.resetSelection();
   }
   resetSelection(){
-    let teamMembers = this.props.teamMembers;
+    let { teamMembers, sprints } = this.props;
     this.setState({
-      type: types[0].id,
-      priority: priority[0].id,
-      iteration: Iterations[0],
+      type: types.TASK,
+      priority: priority.MEDIUM,
+      iteration: sprints[0].id,
       assignedTo: teamMembers.length? teamMembers[0].id : null
     });
   }
@@ -75,8 +69,7 @@ class EditTask extends React.Component{
   onAssignedToChanged(assignedTo){ this.setState({assignedTo}); }
 
   render(){
-    let teamMembers = this.props.teamMembers;
-    let sprints = Iterations.map(el=> {return { id: el, name: el} });
+    let { teamMembers, sprints } = this.props;
 
     return <div className='edit-task'>
       <button onClick={this.onAddClick}><i className='fa fa-plus-circle'></i>Add new</button>
@@ -85,11 +78,11 @@ class EditTask extends React.Component{
         <div className='form-group'>
           <div>
             <label>Type</label>
-            <Dropdown items={types} onChange={this.onTypeChanged} selected={types[0].id}/>
+            <Dropdown items={helper.makeListFromEnum(types)} onChange={this.onTypeChanged} selected={types.TASK}/>
           </div>
           <div>
             <label>Priority</label>
-            <Dropdown items={priority} onChange={this.onPriorityChanged} selected={priority[0].id}/>
+            <Dropdown items={helper.makeListFromEnum(priority)} onChange={this.onPriorityChanged} selected={priority.MEDIUM}/>
           </div>
         </div>
 
@@ -100,7 +93,7 @@ class EditTask extends React.Component{
           </div>
           <div>
             <label>Assign To</label>
-            <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={teamMembers.length? teamMembers[0].id: ''}/>
+            <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={''}/>
           </div>
         </div>
 
@@ -122,5 +115,7 @@ class EditTask extends React.Component{
 export default withTracker(props => {
   let teamMembers = TeamMembers.find().fetch() || [];
   teamMembers = teamMembers.map(el=>{ return {id: el._id, name: el.name} });
-  return { teamMembers };
+  teamMembers.push({id:'', name:''})
+  let sprints = Iterations.map(el=> {return { id: el, name: el} });
+  return { teamMembers, sprints };
 })(EditTask);

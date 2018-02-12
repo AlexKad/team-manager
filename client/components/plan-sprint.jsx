@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Tasks, TeamMembers } from '../../imports/collections.js';
-import { typesList, statusList, priorityList } from '../constants.js';
+import { types, status, priority } from '../constants.js';
 
 class PlanSprintBoard extends React.Component{
   constructor(props){
@@ -11,9 +11,15 @@ class PlanSprintBoard extends React.Component{
   }
   renderTask(task){
     //TODO: add checkbox
+    let personName = '';
+    if(task.assignedTo){
+      let member = TeamMembers.findOne(task.assignedTo);
+      if(member) personName = member.name;
+    }
+
     return <div className='task' key={task._id}>
       <h4>{task.name}</h4>
-      <span>Assigned to: {task.assignedTo}</span>
+      <span>Assigned to: {personName}</span>
     </div>
   }
   render(){
@@ -45,6 +51,6 @@ class PlanSprintBoard extends React.Component{
 
 export default withTracker(props=>{
   let team = TeamMembers.find().fetch() || [];
-  let tasks = Tasks.find({ status: statusList.OPEN }).fetch() || [];
+  let tasks = Tasks.find({ status: status.OPEN }).fetch() || [];
   return { team, tasks };
 })(PlanSprintBoard)

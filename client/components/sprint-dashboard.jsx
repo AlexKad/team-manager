@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Tasks, TeamMembers } from '../../imports/collections.js';
-import { typesList, statusList, priorityList } from '../constants.js';
+import { types, status, priority } from '../constants.js';
 
 class SprintDashboard extends React.Component{
   constructor(props){
@@ -10,18 +10,24 @@ class SprintDashboard extends React.Component{
     this.state = { };
   }
   renderTask(task){
+    let personName = '';
+    if(task.assignedTo){
+      let member = TeamMembers.findOne(task.assignedTo);
+      if(member) personName = member.name;
+    }
+
     return <div className='task' key={task._id}>
       <h4>{task.name}</h4>
       <span>{task.iteration}</span><br/>
-      <span>Assigned to: {task.assignedTo}</span>
+      <span>Assigned to: {personName}</span>
     </div>
   }
   render(){
     let tasks= this.props.tasks;
 
-    let todo = tasks.filter(el=>el.status == statusList.OPEN);
-    let inprogress = tasks.filter(el=>el.status == statusList.IN_PROGRESS);
-    let done = tasks.filter(el=>el.status == statusList.CLOSED);
+    let todo = tasks.filter(el=>el.status == status.OPEN);
+    let inprogress = tasks.filter(el=>el.status == status.IN_PROGRESS);
+    let done = tasks.filter(el=>el.status == status.CLOSED);
 
     //IDEA: add 'move to the future iteration' button for the to do and in progress items
 

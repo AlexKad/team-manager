@@ -3,6 +3,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { TeamMembers, Tasks } from '../../imports/collections.js';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
+import { types, statuses, priority } from '../constants.js';
 
 class TasksGrid extends React.Component{
   constructor(props){
@@ -34,7 +35,16 @@ class TasksGrid extends React.Component{
         },
         {
           Header:'Assigned To',
-          accessor:'assignedTo'
+          accessor:'assignedTo',
+          Cell: ({ original: task }) => {
+            let personName = "";
+            if(task.assignedTo){
+              let member = TeamMembers.findOne(task.assignedTo);
+              if(member) personName = member.name;
+            }
+
+            return personName;
+          }
         },
         {
           Header:'Iteration',
