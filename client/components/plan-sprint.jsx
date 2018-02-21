@@ -10,6 +10,29 @@ class PlanSprintBoard extends React.Component{
   constructor(props){
     super(props);
     this.state = { };
+    this.onDragOver = this.onDragOver.bind(this);
+    this.onDrop = this.onDrop.bind(this);
+  }
+  onDragOver(e){
+    e.preventDefault();
+  }
+  onDrop(e, iteration){
+    e.preventDefault();
+    const stringified = e.dataTransfer.getData("text");
+    if (!stringified) return;
+
+    const data = JSON.parse(stringified);
+    Meteor.call('updateTaskIteration', data.taskId, iteration, (e, res)=>{
+      if(e) console.log(e);
+    })
+
+    e.dataTransfer.clearData();
+  }
+  renderBox(title, styleClass, iteration, tasksList){
+    return <div className={styleClass} onDragOver={this.onDragOver} onDrop={(e)=> this.onDrop(e, iteration)}>
+              <h3>{title}</h3>
+              { tasksList.map(el=> <Task task={el} key={el._id} allowDrag={true}/>) }
+           </div>
   }
   render(){
     let { tasks, iteration }= this.props;
@@ -20,19 +43,13 @@ class PlanSprintBoard extends React.Component{
     //TODO: implement drag n drop
     return <div className='plan-sprint'>
       <h2>Planning Tasks for {this.props.iteration}</h2>
-      <div className='plan-sprint-board'>
-        <div className='todo box'>
-          <h3>Backlog</h3>
-          { backLog.map(el=> <Task task={el} key={el._id}/>) }
-        </div>
+      <div className='plan-sprint-board' >
+        { this.renderBox('Backlog', 'todo box', 'future iterations', backLog)}
         <div className='buttons'>
           <button> -&gt; </button>
           <button> &lt;- </button>
         </div>
-        <div className='in-progress box'>
-          <h3>{this.props.iteration}</h3>
-          { current.map(el=> <Task task={el} key={el._id}/>) }
-        </div>
+        { this.renderBox(iteration, 'in-progress box', iteration, current)}
       </div>
     </div>
   }

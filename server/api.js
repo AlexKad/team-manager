@@ -18,5 +18,8 @@ Meteor.methods({
   },
   updateTaskStatus: (id, newStatus)=>{
     return Tasks.update(id, {$set: { status: newStatus } });
+  },
+  updateTaskIteration: (id, newIter)=>{
+    return Tasks.update(id, {$set: { iteration: newIter } });
   }
 });
