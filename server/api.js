@@ -8,10 +8,15 @@ Meteor.methods({
   removeTeamMember: (id)=>{
     TeamMembers.remove({ _id: id });
   },
+
+
   addTask: (task)=>{
     Tasks.insert(task);
   },
   getTaskById: (id)=>{
-
+    return Tasks.findOne(id);
+  },
+  updateTaskStatus: (id, newStatus)=>{
+    return Tasks.update(id, {$set: { status: newStatus } });
   }
 });

@@ -10,31 +10,45 @@ class SprintDashboard extends React.Component{
   constructor(props){
     super(props);
     this.state = { };
+    this.onDragOver = this.onDragOver.bind(this);
+    this.onDrop = this.onDrop.bind(this);
+  }
+  onDragOver(e){
+    e.preventDefault();
+  }
+  onDrop(e, status){
+    e.preventDefault();
+    const stringified = e.dataTransfer.getData("text");
+    if (!stringified) return;
+
+    const data = JSON.parse(stringified);
+    Meteor.call('updateTaskStatus', data.taskId, status, (e, res)=>{
+      if(e) console.log(e);
+    })
+
+    e.dataTransfer.clearData();
+  }
+  renderBox(title, styleClass, taskStatus, tasksList){
+    return <div className={styleClass} onDragOver={this.onDragOver} onDrop={(e)=> this.onDrop(e, taskStatus)}>
+      <h3>{title}</h3>
+      { tasksList.map(el=> <Task task={el} key={el._id} allowDrag={true}/>) }
+    </div>;
   }
   render(){
     let tasks= this.props.tasks;
 
-    let todo = tasks.filter(el=>el.status == status.OPEN);
-    let inprogress = tasks.filter(el=>el.status == status.IN_PROGRESS);
-    let done = tasks.filter(el=>el.status == status.CLOSED);
+    let todoTasks = tasks.filter(el=>el.status == status.OPEN);
+    let inprogressTasks = tasks.filter(el=>el.status == status.IN_PROGRESS);
+    let doneTasks = tasks.filter(el=>el.status == status.CLOSED);
 
     //IDEA: add 'move to the future iteration' button for the to do and in progress items
 
     return <div className='sprint'>
       <h2>{this.props.iteration}</h2>
       <div className='sprint-dashboard'>
-        <div className='todo box'>
-          <h3>TO DO</h3>
-          { todo.map(el=> <Task task={el} key={el._id}/>) }
-        </div>
-        <div className='in-progress middle box'>
-          <h3>In Progress</h3>
-          { inprogress.map(el=> <Task task={el} key={el._id}/>) }
-        </div>
-        <div className='done box'>
-          <h3>Done</h3>
-          { done.map(el=> <Task task={el} key={el._id}/>) }
-        </div>
+        { this.renderBox('TO DO', 'todo box', status.OPEN, todoTasks) }
+        { this.renderBox('In progress', 'in-progress middle box', status.IN_PROGRESS, inprogressTasks) }
+        { this.renderBox('Done', 'done box', status.CLOSED, doneTasks) }
       </div>
     </div>
   }

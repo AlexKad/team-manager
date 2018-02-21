@@ -10,6 +10,7 @@ class Task extends React.Component{
     super(props);
     this.state = {};
     this.assignedToChanged = this.assignedToChanged.bind(this);
+    this.onDrag = this.onDrag.bind(this);
   }
   assignedToChanged(taskId, assignedTo){
 
@@ -26,9 +27,14 @@ class Task extends React.Component{
        return "";
     }
   }
+  onDrag(e){
+    let data = JSON.stringify({ taskId: this.props.task._id });
+    e.dataTransfer.setData("text", data);
+  }
+
   render(){
-    let {task, teamList } = this.props;
-    return <div className='task'>
+    let {task, teamList, allowDrag } = this.props;
+    return <div className='task' draggable={allowDrag} onDragStart={ this.onDrag }>
       <div></div>
       <h4> {this.renderPriority(task.priority)} {task.name}</h4>
       <div>Assigned to:
