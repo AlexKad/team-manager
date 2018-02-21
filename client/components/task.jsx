@@ -11,6 +11,7 @@ class Task extends React.Component{
     this.state = {};
     this.assignedToChanged = this.assignedToChanged.bind(this);
     this.onDrag = this.onDrag.bind(this);
+    this.onCheck = this.onCheck.bind(this);
   }
   assignedToChanged(taskId, assignedTo){
 
@@ -31,11 +32,15 @@ class Task extends React.Component{
     let data = JSON.stringify({ taskId: this.props.task._id });
     e.dataTransfer.setData("text", data);
   }
-
+  onCheck(e){
+    this.props.onTaskCheck(this.props.task._id, e.target.checked);
+  }
   render(){
-    let {task, teamList, allowDrag } = this.props;
+    let {task, teamList, allowDrag, onTaskCheck } = this.props;
     return <div className='task' draggable={allowDrag} onDragStart={ this.onDrag }>
-      <div></div>
+      <div>
+        { onTaskCheck? <input type="checkbox" onChange={this.onCheck}/> : ''}
+      </div>
       <h4> {this.renderPriority(task.priority)} {task.name}</h4>
       <div>Assigned to:
         <Dropdown items={teamList} onChange={this.assignedToChanged} selected={task.assignedTo}/>

@@ -9,9 +9,10 @@ import Dropdown from './dropdown';
 class PlanSprintBoard extends React.Component{
   constructor(props){
     super(props);
-    this.state = { };
+    this.state = { checkedTasks: [] };
     this.onDragOver = this.onDragOver.bind(this);
     this.onDrop = this.onDrop.bind(this);
+    this.onTaskCheck = this.onTaskCheck.bind(this);
   }
   onDragOver(e){
     e.preventDefault();
@@ -28,10 +29,19 @@ class PlanSprintBoard extends React.Component{
 
     e.dataTransfer.clearData();
   }
+  onTaskCheck(taskId, isChecked){
+    let checked = this.state.checkedTasks.slice()
+    if(isChecked) checked.push(taskId);
+    else {
+      let ind = checked.indexOf(taskId);
+      checked.splice(ind, 1);
+    }
+    this.setState({ checkedTasks: checked })
+  }
   renderBox(title, styleClass, iteration, tasksList){
     return <div className={styleClass} onDragOver={this.onDragOver} onDrop={(e)=> this.onDrop(e, iteration)}>
               <h3>{title}</h3>
-              { tasksList.map(el=> <Task task={el} key={el._id} allowDrag={true}/>) }
+              { tasksList.map(el=> <Task task={el} key={el._id} allowDrag={true} onTaskCheck={this.onTaskCheck}/>) }
            </div>
   }
   render(){
