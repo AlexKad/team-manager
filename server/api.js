@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import {TeamMembers, Tasks} from '../imports/collections.js';
+import _ from 'lodash';
 
 Meteor.methods({
   saveTeamMember: (member)=>{
@@ -19,7 +20,9 @@ Meteor.methods({
   updateTaskStatus: (id, newStatus)=>{
     return Tasks.update(id, {$set: { status: newStatus } });
   },
-  updateTaskIteration: (id, newIter)=>{
-    return Tasks.update(id, {$set: { iteration: newIter } });
+  updateTasksIteration: (ids, newIter)=>{
+    _.each(ids, function(taskId) {
+      Tasks.update(taskId, {$set: { iteration: newIter } });
+    });
   }
 });
