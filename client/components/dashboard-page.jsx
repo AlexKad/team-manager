@@ -6,6 +6,7 @@ import EditTask from './edit-task';
 import EditTeam from './edit-team';
 import SprintDashboard from './sprint-dashboard';
 import PlanSprintBoard from './plan-sprint';
+import ModalWnd from './modal-wnd';
 import { TabContainer, Tab } from './tab-container';
 import { Iterations } from '../../imports/collections.js';
 
@@ -38,6 +39,10 @@ class DashboardPage extends React.Component{
           <TasksGrid onTaskClick={this.openTaskDetails}/>
         </Tab>
       </TabContainer>
+
+      <ModalWnd title="Edit task">
+          <div>Edit tasks</div>
+      </ModalWnd>
     </div>;
  }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { TeamMembers, Tasks } from '../../imports/collections.js';
+import { Dropdown } from './dropdown';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import { types, statuses, priority } from '../constants.js';
@@ -51,11 +52,11 @@ class TasksGrid extends React.Component{
           accessor:'iteration'
         },
         {
-          Header: 'Open Date',
+          Header: 'Opened',
           accessor:'openDate'
         },
         {
-          Header: 'Close Date',
+          Header: 'Closed',
           accessor:'closeDate'
         }
       ];
@@ -68,7 +69,7 @@ class TasksGrid extends React.Component{
       let tasks = this.props.tasks;
       let defaultPageSize = tasks.length < 10? 10 : (tasks.length>20? tasks.length : 20);
 
-      return <ReactTable filterable data={tasks} columns={columns}
+      return <ReactTable data={tasks} columns={columns}
           defaultFilterMethod={(filter,row) => row[filter.id].includes(filter.value)}
           defaultPageSize={defaultPageSize} getTrProps={events}
           noDataText='No tasks or bugs found' />;
@@ -76,6 +77,7 @@ class TasksGrid extends React.Component{
   }
   render(){
     return <div className="tasks-grid">
+      {/* <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={''}/> */}
       { this.renderGrid() }
     </div>
   }
