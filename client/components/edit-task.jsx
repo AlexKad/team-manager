@@ -9,22 +9,18 @@ class EditTask extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      showForm: false,
       type: types.TASK,
       priority: priority.MEDIUM,
       iteration: props.sprints[0].id,
       assignedTo: ''
     };
-    this.onAddClick = this.onAddClick.bind(this);
+
     this.onSave = this.onSave.bind(this);
     this.onCancel = this.onCancel.bind(this);
     this.onTypeChanged = this.onTypeChanged.bind(this);
     this.onPriorityChanged = this.onPriorityChanged.bind(this);
     this.onAssignedToChanged = this.onAssignedToChanged.bind(this);
     this.onIterationChanged = this.onIterationChanged.bind(this);
-  }
-  onAddClick(){
-    this.setState({showForm: true});
   }
   onSave(){
     let { type, priority, assignedTo, iteration } = this.state;
@@ -46,13 +42,13 @@ class EditTask extends React.Component{
         else console.log('saved');
     });
     this.taskName.value = '';
-    this.setState({showForm: false});
     this.resetSelection();
+    this.props.editDone();
   }
   onCancel(){
     this.taskName.value = '';
-    this.setState({showForm: false});
     this.resetSelection();
+    this.props.editDone();
   }
   resetSelection(){
     let { teamMembers, sprints } = this.props;
@@ -72,10 +68,6 @@ class EditTask extends React.Component{
     let { teamMembers, sprints } = this.props;
 
     return <div className='edit-task'>
-      {this.state.showForm? '' : <button onClick={this.onAddClick}><i className='fa fa-plus-circle'></i>Add new</button> }
-      {this.state.showForm?
-      <div className="edit-block">
-
         <div className='form-group long'>
           <label>Name</label>
           <input id='name' ref={(x)=> this.taskName = x}></input>
@@ -107,9 +99,6 @@ class EditTask extends React.Component{
           <button onClick={this.onSave}>Save</button>
           <button onClick={this.onCancel}>Cancel</button>
         </div>
-      </div>
-         : ''
-       }
     </div>
   }
 }
@@ -118,5 +107,7 @@ export default withTracker(props => {
   teamMembers = teamMembers.map(el=>{ return {id: el._id, name: el.name} });
   teamMembers.push({id:'', name:''});
   let sprints = Iterations.map(el=> {return { id: el, name: el} });
-  return { teamMembers, sprints };
+  let task;
+  if(props.taskId) task = Tasks.findOne(props.taskId);
+  return { teamMembers, sprints, task };
 })(EditTask);

@@ -13,16 +13,22 @@ import { Iterations } from '../../imports/collections.js';
 class DashboardPage extends React.Component{
   constructor(props){
     super(props);
-    this.state = { };
+    this.state = { showEditTaskForm: false };
     this.openTaskDetails = this.openTaskDetails.bind(this);
+    this.onAddClick = this.onAddClick.bind(this);
   }
   openTaskDetails(id){
     this.props.history.push('/details?'+id);
   }
+  onAddClick(){
+    this.setState({showEditTaskForm: true });
+  }
   render(){
+    let { showEditTaskForm }= this.state;
     return <div className='dashboard-page'>
       <div><h2>Team Task Manager</h2></div>
-      <EditTask />
+      <button onClick={this.onAddClick}><i className='fa fa-plus-circle'></i>Add new</button>
+      { showEditTaskForm? <EditTask editDone={()=>this.setState({showEditTaskForm: false})}/> : ''}
 
       <TabContainer>
         <Tab title="Current Sprint">
