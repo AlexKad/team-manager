@@ -44,7 +44,7 @@ class EditTask extends React.Component{
       type: type,
       priority: priority,
       assignedTo: assignedTo,
-      status: status.OPEN,
+      status: statuses.OPEN,
       dateOpened: currTime,
       dateClosed: null,
       iteration: iteration,

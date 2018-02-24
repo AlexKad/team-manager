@@ -16,14 +16,14 @@ class Task extends React.Component{
   assignedToChanged(taskId, assignedTo){
     //TODO
   }
-  renderPriority(pr){
+  renderPriority(pr, type){
     switch(pr){
       case priorities.HIGH:
-        return <span className="fa fa-arrow-up red" />;
+        return <span className="red">{type}</span>;
       case priorities.MEDIUM:
-        return <span className="fa fa-circle green"/>;
+        return <span className="green">{type}</span>;
       case priorities.LOW:
-        return <span className="fa fa-arrow-down yellow" />;
+        return <span className="blue">{type}</span>;
       default:
        return "";
     }
@@ -38,10 +38,8 @@ class Task extends React.Component{
   render(){
     let {task, teamList, allowDrag, onTaskCheck } = this.props;
     return <div className='task' draggable={allowDrag} onDragStart={ this.onDrag }>
-      <div>
-        { onTaskCheck? <input type="checkbox" onChange={this.onCheck}/> : ''}
-      </div>
-      <h4> {this.renderPriority(task.priority)} {task.name}</h4>
+      { onTaskCheck? <input type="checkbox" onChange={this.onCheck}/> : ''}
+      <h4> [ {this.renderPriority(task.priority,task.type)} ] {task.name}</h4>
       <div>Assigned to:
         <Dropdown items={teamList} onChange={this.assignedToChanged} selected={task.assignedTo}/>
       </div>
