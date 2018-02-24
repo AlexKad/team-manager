@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Tasks, TeamMembers } from '../../imports/collections.js';
-import { types, status, priority } from '../constants.js';
+import { types, statuses, priorities } from '../constants.js';
 import Task from './task';
 import Dropdown from './dropdown';
 
@@ -25,7 +25,7 @@ class PlanSprintBoard extends React.Component{
     if (!stringified) return;
 
     const data = JSON.parse(stringified);
-    Meteor.call('updateTaskIteration', data.taskId, iteration, (e, res)=>{
+    Meteor.call('updateTasksIteration', [data.taskId], iteration, (e, res)=>{
       if(e) console.log(e);
     })
 
@@ -62,7 +62,7 @@ class PlanSprintBoard extends React.Component{
     return <div className={styleClass} onDragOver={this.onDragOver} onDrop={(e)=> this.onDrop(e, iteration)}>
               <h3>{title}</h3>
               { tasksList.map(el=>
-                <Task task={el} key={el._id}
+                <Task task={el} key={el._id} onEdit={ this.props.onEditTask}
                   allowDrag={true} onTaskCheck={(taskId, isChecked)=>this.onTaskCheck(taskId, isChecked, iteration)}/>) }
            </div>
   }
@@ -87,6 +87,6 @@ class PlanSprintBoard extends React.Component{
 }
 
 export default withTracker(props=>{
-  let tasks = Tasks.find({ status: status.OPEN }).fetch() || [];
+  let tasks = Tasks.find({ status: statuses.OPEN }).fetch() || [];
   return { tasks };
 })(PlanSprintBoard)

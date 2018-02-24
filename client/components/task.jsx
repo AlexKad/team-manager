@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Tasks, TeamMembers } from '../../imports/collections.js';
-import { types, status, priority } from '../constants.js';
+import { types, statuses, priorities } from '../constants.js';
 import Dropdown from './dropdown';
 
 class Task extends React.Component{
@@ -14,16 +14,16 @@ class Task extends React.Component{
     this.onCheck = this.onCheck.bind(this);
   }
   assignedToChanged(taskId, assignedTo){
-
+    //TODO
   }
   renderPriority(pr){
     switch(pr){
-      case priority.HIGH:
+      case priorities.HIGH:
         return <span className="fa fa-arrow-up red" />;
-      case priority.MEDIUM:
-        return <span className="fa fa-circle yellow"/>;
-      case priority.LOW:
-        return <span className="fa fa-arrow-down green" />;
+      case priorities.MEDIUM:
+        return <span className="fa fa-circle green"/>;
+      case priorities.LOW:
+        return <span className="fa fa-arrow-down yellow" />;
       default:
        return "";
     }
@@ -46,6 +46,7 @@ class Task extends React.Component{
         <Dropdown items={teamList} onChange={this.assignedToChanged} selected={task.assignedTo}/>
       </div>
       <div>{task.iteration}</div>
+      <div><i className="edit fa fa-edit" onClick={(e)=>this.props.onEdit(task._id)}></i></div>
     </div>
   }
 }

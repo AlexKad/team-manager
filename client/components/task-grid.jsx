@@ -4,7 +4,7 @@ import { TeamMembers, Tasks } from '../../imports/collections.js';
 import { Dropdown } from './dropdown';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import { types, statuses, priority } from '../constants.js';
+import { types, statuses, priorities } from '../constants.js';
 
 class TasksGrid extends React.Component{
   constructor(props){

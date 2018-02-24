@@ -13,29 +13,37 @@ import { Iterations } from '../../imports/collections.js';
 class DashboardPage extends React.Component{
   constructor(props){
     super(props);
-    this.state = { showEditTaskForm: false };
+    this.state = { showEditTaskForm: false, showEditTaskWindow: false, editTaskId: null };
     this.openTaskDetails = this.openTaskDetails.bind(this);
-    this.onAddClick = this.onAddClick.bind(this);
+    this.onAddTaskClick = this.onAddTaskClick.bind(this);
+    this.onEditTask = this.onEditTask.bind(this);
+    this.onCloseEditWnd = this.onCloseEditWnd.bind(this);
   }
   openTaskDetails(id){
     this.props.history.push('/details?'+id);
   }
-  onAddClick(){
+  onAddTaskClick(){
     this.setState({showEditTaskForm: true });
   }
+  onEditTask(taskId){
+    this.setState({ editTaskId: taskId, showEditTaskWindow: true});
+  }
+  onCloseEditWnd(){
+    this.setState({ editTaskId: null, showEditTaskWindow: false})
+  }
   render(){
-    let { showEditTaskForm }= this.state;
+    let { showEditTaskForm, showEditTaskWindow }= this.state;
     return <div className='dashboard-page'>
       <div><h2>Team Task Manager</h2></div>
-      <button onClick={this.onAddClick}><i className='fa fa-plus-circle'></i>Add new</button>
+      <button onClick={this.onAddTaskClick}><i className='fa fa-plus-circle'></i>Add new</button>
       { showEditTaskForm? <EditTask editDone={()=>this.setState({showEditTaskForm: false})}/> : ''}
 
       <TabContainer>
         <Tab title="Current Sprint">
-          <SprintDashboard iteration={Iterations[0]}></SprintDashboard>
+          <SprintDashboard iteration={Iterations[0]} onEditTask={ this.onEditTask}></SprintDashboard>
         </Tab>
         <Tab title="Plan Next Sprint">
-          <PlanSprintBoard iteration={Iterations[1]}></PlanSprintBoard>
+          <PlanSprintBoard iteration={Iterations[1]} onEditTask={ this.onEditTask}></PlanSprintBoard>
         </Tab>
         <Tab title="Team & Workload">
           <EditTeam />
@@ -46,9 +54,12 @@ class DashboardPage extends React.Component{
         </Tab>
       </TabContainer>
 
-      <ModalWnd title="Edit task">
-          <div>Edit tasks</div>
-      </ModalWnd>
+      { showEditTaskWindow?
+        <ModalWnd title="Edit task" onClose={this.onCloseEditWnd}>
+          <EditTask taskId={this.state.editTaskId} editDone={this.onCloseEditWnd}/>
+        </ModalWnd> : ''
+      }
+
     </div>;
  }
 }

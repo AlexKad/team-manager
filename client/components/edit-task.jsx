@@ -1,19 +1,15 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import Dropdown from './dropdown';
-import { TeamMembers, Iterations } from '../../imports/collections.js';
-import { types, status, priority } from '../constants.js';
+import { Tasks, TeamMembers, Iterations } from '../../imports/collections.js';
+import { types, statuses, priorities } from '../constants.js';
 import helper from '../helper.js';
 
 class EditTask extends React.Component{
   constructor(props){
     super(props);
-    this.state = {
-      type: types.TASK,
-      priority: priority.MEDIUM,
-      iteration: props.sprints[0].id,
-      assignedTo: ''
-    };
+    let taskData = {};
+    this.state = props.task? this.getTaskData(props.task) : this.getDefaultTaskData();
 
     this.onSave = this.onSave.bind(this);
     this.onCancel = this.onCancel.bind(this);
@@ -21,6 +17,23 @@ class EditTask extends React.Component{
     this.onPriorityChanged = this.onPriorityChanged.bind(this);
     this.onAssignedToChanged = this.onAssignedToChanged.bind(this);
     this.onIterationChanged = this.onIterationChanged.bind(this);
+  }
+  getTaskData(task){
+    return {
+      type: task.type,
+      priority: task.priority,
+      iteration: task.iteration,
+      assignedTo: task.assignedTo
+    };
+  }
+  getDefaultTaskData(){
+    let { teamMembers, sprints } = this.props;
+    return {
+      type: types.TASK,
+      priority: priorities.MEDIUM,
+      iteration: sprints[0].id,
+      assignedTo: teamMembers.length? teamMembers[0].id : ''
+    };
   }
   onSave(){
     let { type, priority, assignedTo, iteration } = this.state;
@@ -51,13 +64,8 @@ class EditTask extends React.Component{
     this.props.editDone();
   }
   resetSelection(){
-    let { teamMembers, sprints } = this.props;
-    this.setState({
-      type: types.TASK,
-      priority: priority.MEDIUM,
-      iteration: sprints[0].id,
-      assignedTo: teamMembers.length? teamMembers[0].id : null
-    });
+    let data = this.getDefaultTaskData();
+    this.setState(data);
   }
   onTypeChanged(type){ this.setState({type}); }
   onPriorityChanged(priority){ this.setState({priority}); }
@@ -66,7 +74,7 @@ class EditTask extends React.Component{
 
   render(){
     let { teamMembers, sprints } = this.props;
-
+    let { type, priority, iteration, assignedTo } = this.state;
     return <div className='edit-task'>
         <div className='form-group long'>
           <label>Name</label>
@@ -76,22 +84,22 @@ class EditTask extends React.Component{
         <div className='form-group'>
           <div>
             <label>Type</label>
-            <Dropdown items={helper.makeListFromEnum(types)} onChange={this.onTypeChanged} selected={types.TASK}/>
+            <Dropdown items={helper.makeListFromEnum(types)} onChange={this.onTypeChanged} selected={type}/>
           </div>
           <div>
             <label>Priority</label>
-            <Dropdown items={helper.makeListFromEnum(priority)} onChange={this.onPriorityChanged} selected={priority.MEDIUM}/>
+            <Dropdown items={helper.makeListFromEnum(priorities)} onChange={this.onPriorityChanged} selected={priority}/>
           </div>
         </div>
 
         <div className='form-group'>
           <div>
             <label>Iteration</label>
-            <Dropdown items={sprints} onChange={this.onIterationChanged} selected={sprints[0].id}/>
+            <Dropdown items={sprints} onChange={this.onIterationChanged} selected={iteration}/>
           </div>
           <div>
             <label>Assign To</label>
-            <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={''}/>
+            <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={assignedTo}/>
           </div>
         </div>
 

@@ -3,13 +3,13 @@ export const types = {
   BUG: 'bug'
 };
 
-export const status = {
+export const statuses = {
   OPEN: 'open',
   IN_PROGRESS: 'in progress',
   CLOSED: 'closed/fixed'
 };
 
-export const priority= {
+export const priorities= {
   HIGH: 'high',
   MEDIUM: 'medium',
   LOW: 'low'
