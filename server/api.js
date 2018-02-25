@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import {TeamMembers, Tasks} from '../imports/collections.js';
+import {TeamMembers, Tasks, Tags} from '../imports/collections.js';
 import _ from 'lodash';
 
 Meteor.methods({
@@ -12,7 +12,15 @@ Meteor.methods({
 
 
   addTask: (task)=>{
-    Tasks.insert(task);
+    if(task._id){
+      Tasks.upsert({_id: task._id}, task);
+    }
+    else {
+      Tasks.insert(task);
+    }
+    if(task.tag){
+      Tags.upsert({name: task.tag}, { name: task.tag});
+    }
   },
   getTaskById: (id)=>{
     return Tasks.findOne(id);

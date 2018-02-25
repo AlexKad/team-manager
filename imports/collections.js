@@ -2,11 +2,13 @@ import { Mongo } from 'meteor/mongo';
 
 export let TeamMembers = new Mongo.Collection('TeamMembers');
 export let Tasks = new Mongo.Collection('Tasks');
+export let Tags = new Mongo.Collection('Tags');
 
 TeamMembers.requiredFields = ['name', 'icon', 'title'];
 Tasks.requiredFields = [
           'name',
           'type',
+          'tag',
           'priority',
           'assignedTo',
           'status',
