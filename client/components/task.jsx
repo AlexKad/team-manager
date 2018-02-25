@@ -28,6 +28,11 @@ class Task extends React.Component{
        return "";
     }
   }
+  renderTag(tag){
+    if(tag){
+      return <span className="tag">{tag}</span>;
+    }
+  }
   onDrag(e){
     let data = JSON.stringify({ taskId: this.props.task._id });
     e.dataTransfer.setData("text", data);
@@ -39,7 +44,10 @@ class Task extends React.Component{
     let {task, teamList, allowDrag, onTaskCheck } = this.props;
     return <div className='task' draggable={allowDrag} onDragStart={ this.onDrag }>
       { onTaskCheck? <input type="checkbox" onChange={this.onCheck}/> : ''}
-      <h4> [ {this.renderPriority(task.priority,task.type)} ] {task.name}</h4>
+      <h4> [ {this.renderPriority(task.priority,task.type)} ]
+           { this.renderTag(task.tag) } </h4>
+
+      <h4> { task.name }</h4>
       <div>Assigned to:
         <Dropdown items={teamList} onChange={this.assignedToChanged} selected={task.assignedTo}/>
       </div>
