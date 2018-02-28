@@ -26,11 +26,11 @@ function calculateIterations(){
   let start = new Date();
   let end = new Date();
   start.setDate(now.getDate() - offset+1);
-  end.setDate(start.getDate()+5);
+  end.setDate(start.getDate()+4);
 
   let sprint1 = start.toLocaleDateString() + ' - ' + end.toLocaleDateString();
-  start.setDate(start.getDate()+6);
-  end.setDate(end.getDate()+6);
+  start.setDate(start.getDate()+7);
+  end.setDate(end.getDate()+7);
 
   return [ sprint1,
            start.toLocaleDateString() + ' - ' + end.toLocaleDateString(),
