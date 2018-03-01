@@ -1,6 +1,7 @@
 .edit-task{
   .form-group{
     padding: 10px 15px;
+    position: relative;
     div{
       margin-right: 55px;
       display: inline-block;
@@ -16,8 +17,35 @@
     &.long{
       textarea, input{ width:463px;}
     }
+    .tags-input{ width: 200px; }
     .tags-list{
-      
+      position: absolute;
+      top: 42px;
+      left: 95px;
+      width: 210px;
+      z-index: 100;
+      background: #f8f8f8;
+      padding: 3px 0;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      border-radius: 5px;
+      border: 1px solid lightgrey;
+      -webkit-box-shadow: -4px 10px 35px -4px rgba(0,0,0,0.6);
+      -moz-box-shadow: -4px 10px 35px -4px rgba(0,0,0,0.6);
+      box-shadow: -4px 10px 35px -4px rgba(0,0,0,0.6);
+      &>div{
+        width: 100%;
+        flex-shrink: 0;
+        padding: 5px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        &:hover{
+          background: #2389ef;
+          color: white;
+          cursor: pointer;
+        }
+      }
     }
   }
   .buttons{

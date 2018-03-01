@@ -1,7 +1,7 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import Dropdown from './dropdown';
-import { Tasks, TeamMembers, Iterations } from '../../imports/collections.js';
+import { Tasks, TeamMembers, Iterations, Tags } from '../../imports/collections.js';
 import { types, statuses, priorities } from '../constants.js';
 import helper from '../helper.js';
 
@@ -79,13 +79,18 @@ class EditTask extends React.Component{
   onAssignedToChanged(assignedTo){ this.setState({assignedTo}); }
   onTypeTags(e){
     let val = e.target.value;
-    //TODO set filteredTags
     this.setState({tag: val});
+    setTimeout(()=>{ this.filterTags()}, 600);
   }
-
+  filterTags(){
+    let value = this.state.tag.toLowerCase();
+    let allTags = this.props.allTags;
+    let matchTags = allTags.filter(tag=> tag.name.toLowerCase().indexOf(value)>-1);
+    this.setState({ filteredTags: matchTags});
+  }
   render(){
     let { teamMembers, sprints } = this.props;
-    let { name, tag, type, priority, iteration, assignedTo } = this.state;
+    let { name, tag, type, priority, iteration, assignedTo, filteredTags } = this.state;
     return <div className='edit-task'>
         <div className='form-group long'>
           <label>Name</label>
@@ -95,7 +100,10 @@ class EditTask extends React.Component{
         <div className="form-group">
           <label>Tags</label>
           <input id="tags"  value={tag} onChange={(e)=>this.onTypeTags(e)}></input>
-          <div className='tags-list'>{this.state.filteredTags.map(el=> <div>{el}</div>)}</div>
+          { filteredTags.length?
+            <div className='tags-list'>
+            { filteredTags.map(el=> <div key={el._id}>{el.name}</div>)}
+          </div> : '' }
         </div>
 
         <div className='form-group'>
@@ -134,5 +142,6 @@ export default withTracker(props => {
   let sprints = Iterations.map(el=> {return { id: el, name: el} });
   let task;
   if(props.taskId) task = Tasks.findOne(props.taskId);
-  return { teamMembers, sprints, task };
+  let allTags = Tags.find().fetch();
+  return { teamMembers, sprints, task, allTags };
 })(EditTask);

@@ -71,7 +71,6 @@ class PlanSprintBoard extends React.Component{
     let backLog = tasks.filter(el=> el.iteration != iteration);
     let current = tasks.filter(el=> el.iteration == iteration);
 
-    //TODO: add 'move many' button
     return <div className='plan-sprint'>
       <h2>Planning Tasks for {this.props.iteration}</h2>
       <div className='plan-sprint-board' >
