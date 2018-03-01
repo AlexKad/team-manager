@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Tasks, TeamMembers } from '../../imports/collections.js';
+import { Tasks, TeamMembers, Iterations } from '../../imports/collections.js';
 import { types, statuses, priorities } from '../constants.js';
 import Task from './task';
 import Dropdown from './dropdown';
@@ -9,7 +9,7 @@ import Dropdown from './dropdown';
 class PlanSprintBoard extends React.Component{
   constructor(props){
     super(props);
-    this.state = { backlogCheckedTasks: [], sprintCheckedTasks: [] };
+    this.state = { backlogCheckedTasks: [], sprintCheckedTasks: [], sprint: props.iteration };
     this.onDragOver = this.onDragOver.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.onTaskCheck = this.onTaskCheck.bind(this);
@@ -42,8 +42,16 @@ class PlanSprintBoard extends React.Component{
     if(isBacklog) this.setState({ backlogCheckedTasks: checked });
     else this.setState({ sprintCheckedTasks: checked });
   }
+  changeSprint(offset){
+    let current = this.state.sprint;
+    let ind = Iterations.indexOf(current);
+    let newSprint = Iterations[ind+offset];
+    if(newSprint && newSprint !='future iterations'){
+      this.setState({ sprint: newSprint });
+    }
+  }
   moveToSprint(){
-    let sprint = this.props.iteration;
+    let { sprint } = this.state;
     let scope = this;
     Meteor.call('updateTasksIteration', this.state.backlogCheckedTasks, sprint, (e,res)=>{
       if(e) console.log(e);
@@ -67,19 +75,24 @@ class PlanSprintBoard extends React.Component{
            </div>
   }
   render(){
-    let { tasks, iteration }= this.props;
-    let backLog = tasks.filter(el=> el.iteration != iteration);
-    let current = tasks.filter(el=> el.iteration == iteration);
+    let { tasks } = this.props;
+    let { sprint } = this.state;
+    let backLog = tasks.filter(el=> el.iteration != sprint);
+    let currentTasks = tasks.filter(el=> el.iteration == sprint);
 
     return <div className='plan-sprint'>
-      <h2>Planning Tasks for {this.props.iteration}</h2>
+      <h2>Planning Tasks for
+        <i className="fa fa-angle-left" onClick={()=> this.changeSprint(-1)}/>
+        {sprint}
+        <i className="fa fa-angle-right" onClick={()=> this.changeSprint(+1)}/>
+      </h2>
       <div className='plan-sprint-board' >
         { this.renderBox('Backlog', 'todo box', 'future iterations', backLog)}
         <div className='buttons'>
           <button onClick={ this.moveToSprint }> -&gt; </button>
           <button onClick={ this.moveToBacklog }> &lt;- </button>
         </div>
-        { this.renderBox(iteration, 'in-progress box', iteration, current)}
+        { this.renderBox(sprint, 'in-progress box', sprint, currentTasks)}
       </div>
     </div>
   }
