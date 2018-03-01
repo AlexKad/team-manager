@@ -19,7 +19,24 @@ class EditTask extends React.Component{
     this.onAssignedToChanged = this.onAssignedToChanged.bind(this);
     this.onIterationChanged = this.onIterationChanged.bind(this);
     this.onTypeTags = this.onTypeTags.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+  handleClickOutside(e) {
+    if(this.refs.tagsList){
+      var clickedInside = this.refs.tagsList.contains(e.target);
+      if(!clickedInside) this.setState({ filteredTags: [] });
+    }
+  }
+  onTagClick(tagName){
+    this.setState({ tag: tagName, filteredTags: []});
+  }
+
   getTaskData(task){
     return {
       name: task.name,
@@ -101,8 +118,8 @@ class EditTask extends React.Component{
           <label>Tags</label>
           <input id="tags"  value={tag} onChange={(e)=>this.onTypeTags(e)}></input>
           { filteredTags.length?
-            <div className='tags-list'>
-            { filteredTags.map(el=> <div key={el._id}>{el.name}</div>)}
+            <div className='tags-list' ref='tagsList'>
+            { filteredTags.map(el=> <div key={el._id} onClick={()=> this.onTagClick(el.name)}>{el.name}</div>)}
           </div> : '' }
         </div>
 

@@ -13,7 +13,7 @@ import { Iterations } from '../../imports/collections.js';
 class DashboardPage extends React.Component{
   constructor(props){
     super(props);
-    this.state = { showEditTaskForm: false, showEditTaskWindow: false, editTaskId: null };
+    this.state = { showEditTaskWindow: false, editTaskId: null };
     this.openTaskDetails = this.openTaskDetails.bind(this);
     this.onAddTaskClick = this.onAddTaskClick.bind(this);
     this.onEditTask = this.onEditTask.bind(this);
@@ -23,7 +23,7 @@ class DashboardPage extends React.Component{
     this.props.history.push('/details?'+id);
   }
   onAddTaskClick(){
-    this.setState({showEditTaskForm: true });
+    this.setState({ editTaskId: null, showEditTaskWindow: true});
   }
   onEditTask(taskId){
     this.setState({ editTaskId: taskId, showEditTaskWindow: true});
@@ -32,11 +32,10 @@ class DashboardPage extends React.Component{
     this.setState({ editTaskId: null, showEditTaskWindow: false})
   }
   render(){
-    let { showEditTaskForm, showEditTaskWindow }= this.state;
+    let { showEditTaskWindow, editTaskId }= this.state;
     return <div className='dashboard-page'>
       <div><h2>Team Task Manager</h2></div>
       <button onClick={this.onAddTaskClick}><i className='fa fa-plus-circle'></i>Add new</button>
-      { showEditTaskForm? <EditTask editDone={()=>this.setState({showEditTaskForm: false})}/> : ''}
 
       <TabContainer>
         <Tab title="Current Sprint">
@@ -55,8 +54,8 @@ class DashboardPage extends React.Component{
       </TabContainer>
 
       { showEditTaskWindow?
-        <ModalWnd title="Edit task" onClose={this.onCloseEditWnd}>
-          <EditTask taskId={this.state.editTaskId} editDone={this.onCloseEditWnd}/>
+        <ModalWnd title={ editTaskId? 'Edit task' : 'Add task'} onClose={this.onCloseEditWnd}>
+          <EditTask taskId={editTaskId} editDone={this.onCloseEditWnd}/>
         </ModalWnd> : ''
       }
 
