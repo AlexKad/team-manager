@@ -61,9 +61,8 @@ class EditTask extends React.Component{
     };
   }
   onSave(){
-    let { name, tag, type, priority, assignedTo, iteration } = this.state;
+    let { name, tag, type, priority, assignedTo, iteration, workTime } = this.state;
 
-    let currTime = new Date();
     let task = {
       name: name,
       type: type,
@@ -71,8 +70,7 @@ class EditTask extends React.Component{
       priority: priority,
       assignedTo: assignedTo,
       status: statuses.OPEN,
-      dateOpened: currTime,
-      dateClosed: null,
+      workTime: workTime,
       iteration: iteration,
       attachement: null
     };
@@ -147,7 +145,7 @@ class EditTask extends React.Component{
           </div>
         </div>
 
-        <div className='form-group'>
+        <div className='form-group short'>
           <div>
             <label>Estimated Time</label>
             <input id='name' type='number' min="1" value={workTime} onChange={(e)=> this.setState({workTime: e.target.value})}></input>
