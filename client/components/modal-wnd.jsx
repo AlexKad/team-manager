@@ -16,7 +16,7 @@ export default class ModalWnd extends React.Component {
       <div className='window' onClick={this.closeWnd}>
         <div className='content'>
           <span className='close-btn' onClick={this.closeWnd}>&times;</span>
-          <h4>{this.props.title}</h4>
+          <h3>{this.props.title}</h3>
           { this.props.children }
         </div>
       </div>
