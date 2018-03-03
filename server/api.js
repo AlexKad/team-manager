@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import {TeamMembers, Tasks, Tags} from '../imports/collections.js';
+import { statuses } from '../imports/constants.js';
 import _ from 'lodash';
 
 Meteor.methods({
@@ -13,9 +14,14 @@ Meteor.methods({
 
   addTask: (task)=>{
     if(task._id){
+      let oldTask = Tasks.findOne(task._id);
+      if(oldTask.status!= statuses.CLOSED && task.status == statuses.CLOSED){
+        task.closeDate = (new Date()).getTime();
+      }
       Tasks.upsert({_id: task._id}, task);
     }
     else {
+      task.openDate = (new Date()).getTime();
       Tasks.insert(task);
     }
     if(task.tag){

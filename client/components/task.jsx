@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Tasks, TeamMembers } from '../../imports/collections.js';
-import { types, statuses, priorities } from '../constants.js';
+import { types, statuses, priorities } from '../../imports/constants.js';
 import Dropdown from './dropdown';
 
 class Task extends React.Component{

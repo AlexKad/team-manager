@@ -4,7 +4,7 @@ import { TeamMembers, Tasks } from '../../imports/collections.js';
 import { Dropdown } from './dropdown';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import { types, statuses, priorities } from '../constants.js';
+import { types, statuses, priorities } from '../../imports/constants.js';
 
 class TasksGrid extends React.Component{
   constructor(props){
@@ -53,11 +53,25 @@ class TasksGrid extends React.Component{
         },
         {
           Header: 'Opened',
-          accessor:'openDate'
+          accessor:'openDate',
+          Cell: ({ original: task }) => {
+            if(task.openDate){
+              let time = new Date(task.openDate);
+              return time.toLocaleDateString();
+            }
+            else return '';
+          }
         },
         {
           Header: 'Closed',
-          accessor:'closeDate'
+          accessor:'closeDate',
+          Cell: ({ original: task }) => {
+            if(task.closeDate){
+              let time = new Date(task.closeDate);
+              return time.toLocaleDateString();
+            }
+            else return '';
+          }
         }
       ];
 

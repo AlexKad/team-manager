@@ -12,8 +12,9 @@ Tasks.requiredFields = [
           'priority',
           'assignedTo',
           'status',
-          'dateOpened',
-          'dateClosed',
+          'workTime',
+          'openDate',
+          'closeDate',
           'iteration',
           'attachement'];
 

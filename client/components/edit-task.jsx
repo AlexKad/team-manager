@@ -2,7 +2,7 @@ import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import Dropdown from './dropdown';
 import { Tasks, TeamMembers, Iterations, Tags } from '../../imports/collections.js';
-import { types, statuses, priorities } from '../constants.js';
+import { types, statuses, priorities } from '../../imports/constants.js';
 import helper from '../helper.js';
 
 class EditTask extends React.Component{
@@ -44,7 +44,8 @@ class EditTask extends React.Component{
       tag: task.tag || '',
       priority: task.priority,
       iteration: task.iteration,
-      assignedTo: task.assignedTo
+      assignedTo: task.assignedTo,
+      workTime: task.workTime
     };
   }
   getDefaultTaskData(){
@@ -55,7 +56,8 @@ class EditTask extends React.Component{
       tag: '',
       priority: priorities.MEDIUM,
       iteration: sprints[0].id,
-      assignedTo: teamMembers.length? teamMembers[0].id : ''
+      assignedTo: teamMembers.length? teamMembers[0].id : '',
+      workTime: 4
     };
   }
   onSave(){
@@ -107,7 +109,7 @@ class EditTask extends React.Component{
   }
   render(){
     let { teamMembers, sprints } = this.props;
-    let { name, tag, type, priority, iteration, assignedTo, filteredTags } = this.state;
+    let { name, tag, type, priority, iteration, assignedTo, filteredTags, workTime } = this.state;
     return <div className='edit-task'>
         <div className='form-group long'>
           <label>Name</label>
@@ -142,6 +144,14 @@ class EditTask extends React.Component{
           <div>
             <label>Assign To</label>
             <Dropdown items={teamMembers} onChange={this.onAssignedToChanged} selected={assignedTo}/>
+          </div>
+        </div>
+
+        <div className='form-group'>
+          <div>
+            <label>Estimated Time</label>
+            <input id='name' type='number' min="1" value={workTime} onChange={(e)=> this.setState({workTime: e.target.value})}></input>
+            <label> hours</label>
           </div>
         </div>
 
