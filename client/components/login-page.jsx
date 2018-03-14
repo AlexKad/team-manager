@@ -10,9 +10,12 @@ export class LoginPage extends React.Component {
   }
   render() {
     return <div className="login-page">
-      <h3>Login</h3>
-      <LoginForm />
-      { <Link to="/registration" className="registration-link">Create new account</Link> }
+      <div className="main-block">
+        <div className="left-block"><h2>Task manager</h2></div>
+        <div className="right-block">
+          <LoginForm />
+        </div>
+      </div>
     </div>;
   }
 }
@@ -50,12 +53,16 @@ class _LoginForm extends React.Component {
 
   render() {
     return <form onSubmit={this.submit} className="login-form">
-      <input placeholder="Enter Email Address" autoComplete="username email"
+      <input placeholder="email" autoComplete="username email"
         onInput={(e)=> this.setState({ 'email': e.target.value }) } />
-      <input placeholder="Enter Password" type="password" autoComplete="current-password"
+      <input placeholder="password" type="password" autoComplete="current-password"
         onInput={(e)=> this.setState({ 'password': e.target.value })} />
       <div className="login-error">{this.state.error}</div>
-      <input type="submit" value="Login" className="submit-input"/>
+      <div>
+        <input type="submit" value="Login" className="submit-btn"/>
+        <button className="register-btn">Register</button>
+      </div>
+      {/* { <Link to="/registration" className="registration-link">Create new account</Link> } */}
     </form>
   }
 }
