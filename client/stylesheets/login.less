@@ -7,6 +7,7 @@
   background: -webkit-linear-gradient(to right, #007991, #78ffd6);
   background: linear-gradient(to right, #007991, #78ffd6);
 
+  &.registration .main-block{ padding: 50px 40px; height: 220px}
   .main-block{
     padding: 60px 40px;
     border: 2px solid whitesmoke;
@@ -35,7 +36,12 @@
        flex: 2;
      }
 
-    .login-form{
+    .error{
+      color: pink;
+      text-transform: lowercase;
+    }
+
+    .login-form, .registration-block{
       display:flex;
       flex-direction: column;
       padding:0 30px;
@@ -49,12 +55,20 @@
         letter-spacing: 0.8px;
         border-radius: 10px;
       }
-      .submit-btn, .register-btn{
+      button{
         width: 130px;
         background: rgba(0,0,0,0);
         border: 2px solid whitesmoke;
         color: whitesmoke;
         border-radius: 3px;
+      }
+    }
+    .registration-block{
+      padding: 0 20px;
+      input{
+        margin:5px 0;
+        padding: 7px;
+        font-size: 12px;
       }
     }
   }

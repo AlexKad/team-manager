@@ -26,6 +26,7 @@ class _LoginForm extends React.Component {
     this.state = { email: '', password: '' };
     this.submit = this.submit.bind(this);
     this.validate = this.validate.bind(this);
+    this.registerNew = this.registerNew.bind(this);
   }
   validate(cb) {
     var error = '';
@@ -50,6 +51,9 @@ class _LoginForm extends React.Component {
       });
     });
   }
+  registerNew(){
+    this.props.history.push('/registration');
+  }
 
   render() {
     return <form onSubmit={this.submit} className="login-form">
@@ -57,12 +61,11 @@ class _LoginForm extends React.Component {
         onInput={(e)=> this.setState({ 'email': e.target.value }) } />
       <input placeholder="password" type="password" autoComplete="current-password"
         onInput={(e)=> this.setState({ 'password': e.target.value })} />
-      <div className="login-error">{this.state.error}</div>
+      <span className="error">{this.state.error}</span>
       <div>
-        <input type="submit" value="Login" className="submit-btn"/>
-        <button className="register-btn">Register</button>
+        <button type="submit" className="submit-btn">Login</button>
+        <button type="button" onClick={this.registerNew} className="register-btn">Register</button>
       </div>
-      {/* { <Link to="/registration" className="registration-link">Create new account</Link> } */}
     </form>
   }
 }

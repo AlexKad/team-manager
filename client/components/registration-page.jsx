@@ -16,10 +16,14 @@ export class RegistrationPage extends React.Component {
     });
   }
   render() {
-    return <div className="registration-panel">
-        <h3>Register a New Account</h3>
-        <RegistrationForm onLoading={loading => this._onLoading(loading)} />
+    return <div className="login-page registration">
+      <div className="main-block">
+        <div className="left-block"><h2>Task manager</h2></div>
+        <div className="right-block">
+          <RegistrationForm onLoading={loading => this._onLoading(loading)} />
+        </div>
       </div>
+    </div>;
   }
 }
 
@@ -27,31 +31,33 @@ class _RegistrationForm extends React.Component {
   constructor() {
     super();
     this.state = { email: '', password: '', confirm: '',
-        first: '', last: '', error: '' };
-    this.submit = this.submit.bind(this);
+        name: '', error: '' };
+    this.saveNew = this.saveNew.bind(this);
+    this.onCancel = this.onCancel.bind(this);
   }
-  submit() {
-    if (this.state.error != '') return;
-    let username = this.state.email;
-    let profile = {};
-    profile.name = { first: this.state.first, last: this.state.last };
-    let user = {...this.state, username, profile};
-    var onLoading = this.props.onLoading || (() => {});
+  saveNew() {
+    this.validate(() => {
+      if (this.state.error != '') return;
+      onLoading(true);
+      
+      let user = {...this.state, userName: this.state.email };
+      var onLoading = this.props.onLoading || (() => {});
 
-    onLoading(true);
-    Accounts.createUser(user, err => {
-      onLoading(false);
-      if (err) {
-        this.setState({ error: err.reason });
-      }
+      Accounts.createUser(user, err => {
+        onLoading(false);
+        if (err) {
+          this.setState({ error: err.reason });
+        }
+      });
     });
   }
-  validate() {
+  onCancel(){
+    this.props.history.push('/login');
+  }
+  validate(cb) {
     var error = '';
-    if (this.state.first.length == 0) {
-      error = 'First name required';
-    } else if (this.state.last.length == 0) {
-      error = 'Last name required';
+    if (this.state.name.length == 0) {
+      error = 'Full name is required';
     } else if (this.state.email.length == 0) {
       error = 'Email address required';
     } else if (this.state.password.length == 0) {
@@ -65,19 +71,21 @@ class _RegistrationForm extends React.Component {
     this.setState({[name]: e.target.value});
   }
   render() {
-    return <div>
-      <input placeholder="First Name"
-        onInput={(e)=> this.inputHandler(e,'first')}></input>
-      <input placeholder="Last Name"
-        onInput={(e)=> this.inputHandler(e,'last')}></input>
+    return <div className="registration-block">
+      <input placeholder="Full Name"
+        onInput={(e)=> this.inputHandler(e,'name')}></input>
       <input placeholder="Email Address"
         onInput={(e)=> this.inputHandler(e,'email')}></input>
       <input type="password" placeholder="Enter Password"
         onInput={(e)=> this.inputHandler(e,'password')}></input>
       <input type="password" placeholder="Confirm Password"
         onInput={(e)=> this.inputHandler(e, 'confirm')}></input>
-      <span>{this.state.error}</span>
-      <button onClick={this.submit}>Submit</button>
+      <span className="error">{this.state.error}</span>
+      <div>
+        <button className="save-btn" onClick={this.saveNew}>Save</button>
+        <button className="cancel" onClick={this.onCancel}>Cancel</button>
+      </div>
+
     </div>
   }
 }
