@@ -1,10 +1,19 @@
 import { Mongo } from 'meteor/mongo';
 
 export let TeamMembers = new Mongo.Collection('TeamMembers');
+export let Team = new Mongo.Collection('Team');
 export let Tasks = new Mongo.Collection('Tasks');
 export let Tags = new Mongo.Collection('Tags');
 
-TeamMembers.requiredFields = ['name', 'icon', 'title'];
+Team.requiredFields = [
+  'name'
+];
+
+TeamMembers.requiredFields = [
+  'name',
+  'icon',
+  'title'
+];
 Tasks.requiredFields = [
           'name',
           'type',
@@ -16,7 +25,8 @@ Tasks.requiredFields = [
           'openDate',
           'closeDate',
           'iteration',
-          'attachement'];
+          'attachement'
+        ];
 
 
 export let Iterations = calculateIterations();
