@@ -1,17 +1,9 @@
 import { Meteor } from 'meteor/meteor';
-import {TeamMembers, Tasks, Tags} from '../imports/collections.js';
+import { Tasks, Tags} from '../imports/collections.js';
 import { statuses } from '../imports/constants.js';
 import _ from 'lodash';
 
 Meteor.methods({
-  saveTeamMember: (member)=>{
-    TeamMembers.insert(member);
-  },
-  removeTeamMember: (id)=>{
-    TeamMembers.remove({ _id: id });
-  },
-
-
   addTask: (task)=>{
     if(task._id){
       let oldTask = Tasks.findOne(task._id);
@@ -21,6 +13,10 @@ Meteor.methods({
       Tasks.upsert({_id: task._id}, task);
     }
     else {
+      let userId = Meteor.userId();
+      let user = Meteor.users.findOne(userId);
+      let teamId = user? user.info.teamId : null;
+      task.teamId = teamId;
       task.openDate = (new Date()).getTime();
       Tasks.insert(task);
     }

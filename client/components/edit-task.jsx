@@ -1,7 +1,7 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import Dropdown from './dropdown';
-import { Tasks, TeamMembers, Iterations, Tags } from '../../imports/collections.js';
+import { Tasks, Iterations, Tags } from '../../imports/collections.js';
 import { types, statuses, priorities } from '../../imports/constants.js';
 import helper from '../helper.js';
 
@@ -161,8 +161,8 @@ class EditTask extends React.Component{
   }
 }
 export default withTracker(props => {
-  let teamMembers = TeamMembers.find().fetch() || [];
-  teamMembers = teamMembers.map(el=>{ return {id: el._id, name: el.name} });
+  let teamMembers = Meteor.users.find().fetch();
+  teamMembers = teamMembers.map(el=>{ return {id: el._id, name: el.info.name} });
   teamMembers.push({id:'', name:''});
   let sprints = Iterations.map(el=> {return { id: el, name: el} });
   let task;

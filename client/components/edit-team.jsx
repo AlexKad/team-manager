@@ -1,6 +1,5 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
-import { TeamMembers } from '../../imports/collections.js';
 
 class EditTeam extends React.Component{
   constructor(props){
@@ -12,23 +11,17 @@ class EditTeam extends React.Component{
   }
   onSave(){
     let member = { name: this.nameInput.value };
-    Meteor.call('saveTeamMember', member, (err)=>{
-      if(err) console.warn(err);
-      else console.log('saved');
-    });
+    //TODO
     this.nameInput.value = '';
   }
   onRemoveMember(id){
     let flag = confirm('Are you sure you want to remove this team member?');
     if(flag){
-        Meteor.call('removeTeamMember', id, (err)=>{
-        if(err) console.warn(err);
-        else console.log('removed');
-      });
+        //TODO
     }
   }
   renderMember(mem){
-    return <div key={mem._id}>{mem.name}<i className="action-icon fa fa-times" onClick={()=>this.onRemoveMember(mem._id)}></i></div>;
+    return <div key={mem.id}>{mem.name}<i className="action-icon fa fa-times" onClick={()=>this.onRemoveMember(mem.id)}></i></div>;
   }
   render(){
     let {team} = this.props;
@@ -43,6 +36,7 @@ class EditTeam extends React.Component{
 }
 
 export default withTracker(props=>{
-  let team = TeamMembers.find().fetch() || [];
+  let team = Meteor.users.find().fetch();
+  team = team.map(el=>{ return {id: el._id, name: el.info.name} });
   return { team };
 })(EditTeam)

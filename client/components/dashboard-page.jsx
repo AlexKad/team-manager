@@ -64,9 +64,9 @@ class DashboardPage extends React.Component{
 }
 
 var DPage = withTracker(props => {
-  Meteor.subscribe('TeamMembers');
   Meteor.subscribe('Tasks');
   Meteor.subscribe('Tags');
+  Meteor.subscribe('Meteor.users');
   return { };
 })(DashboardPage);
 

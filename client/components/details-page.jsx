@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Tasks, TeamMembers } from '../../imports/collections.js';
+import { Tasks } from '../../imports/collections.js';
 
 class DetailsPage extends React.Component{
   constructor(props){
@@ -19,7 +19,6 @@ class DetailsPage extends React.Component{
 }
 
 var DPage = withTracker(props => {
-  Meteor.subscribe('TeamMembers');
   Meteor.subscribe('Tasks');
 
   let id = props.location.search.slice(1);

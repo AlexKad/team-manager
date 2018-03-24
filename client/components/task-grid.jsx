@@ -1,6 +1,6 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
-import { TeamMembers, Tasks } from '../../imports/collections.js';
+import { Tasks } from '../../imports/collections.js';
 import { Dropdown } from './dropdown';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
@@ -40,8 +40,8 @@ class TasksGrid extends React.Component{
           Cell: ({ original: task }) => {
             let personName = "";
             if(task.assignedTo){
-              let member = TeamMembers.findOne(task.assignedTo);
-              if(member) personName = member.name;
+              let member = Meteor.users.findOne(task.assignedTo);
+              if(member) personName = member.info.name;
             }
 
             return personName;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Tasks, TeamMembers, Iterations } from '../../imports/collections.js';
+import { Tasks, Iterations } from '../../imports/collections.js';
 import { types, statuses, priorities } from '../../imports/constants.js';
 import Task from './task';
 import Dropdown from './dropdown';
