@@ -38,10 +38,9 @@ class _RegistrationForm extends React.Component {
   saveNew() {
     this.validate(() => {
       if (this.state.error != '') return;
+      let  onLoading = this.props.onLoading || (() => {});
       onLoading(true);
-      
-      let user = {...this.state, userName: this.state.email };
-      var onLoading = this.props.onLoading || (() => {});
+      let user = {...this.state, username: this.state.email };
 
       Accounts.createUser(user, err => {
         onLoading(false);
@@ -65,7 +64,7 @@ class _RegistrationForm extends React.Component {
     } else if (this.state.confirm != this.state.password) {
       error = 'Password does not match';
     }
-    if (error != this.state.error) this.setState({ error });
+    this.setState({ error }, cb);
   }
   inputHandler(e,name){
     this.setState({[name]: e.target.value});
