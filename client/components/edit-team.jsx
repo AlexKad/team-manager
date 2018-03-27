@@ -9,6 +9,7 @@ class EditTeam extends React.Component{
     this.onSave = this.onSave.bind(this);
     this.renderMember = this.renderMember.bind(this);
     this.onRemoveMember = this.onRemoveMember.bind(this);
+    this.createNewTeam = this.createNewTeam.bind(this);
   }
   onSave(){
     let member = { name: this.nameInput.value };
@@ -20,6 +21,13 @@ class EditTeam extends React.Component{
     if(flag){
         //TODO
     }
+  }
+  createNewTeam(){
+    let teamName=this.teamNameInput.value;
+    Meteor.call('createNewTeam', teamName, (err) => {
+        if (err) { alert('There was an error trying to create new team.'); console.warn(err); }
+        else console.log('team saved');
+    });
   }
   renderMember(mem){
     return <div key={mem.id}>{mem.name}<i className="action-icon fa fa-times" onClick={()=>this.onRemoveMember(mem.id)}></i></div>;
@@ -33,14 +41,14 @@ class EditTeam extends React.Component{
       { teamName ? <h3>{teamName}</h3> : <span><i>There is no team associated with the current user.</i></span>}
       { (!teamName && !isAdmin) ? <span><i> Please contact your system administrator.</i></span> : '' }
       { (!teamName &&  isAdmin) ? <div>
-                                    <input placeholder='New team'/>
-                                    <button>Add new team</button>
+                                    <input placeholder='New team' ref={ x=> this.teamNameInput = x }/>
+                                    <button onClick={this.createNewTeam}>Create new team</button>
                                   </div> : '' }
       { teamName ? <div className="team-list">{ teamUsers.map(el=> this.renderMember(el) ) }</div> : '' }
       { (teamName && isAdmin) ? <div>
                                   <input placeholder="John Smith" ref={ x=> this.nameInput = x }/>
                                   <button onClick={this.onSave}>Save</button>
-                                </div> : ''}  
+                                </div> : ''}
     </div>
    }
 }

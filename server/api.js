@@ -34,5 +34,8 @@ Meteor.methods({
     _.each(ids, function(taskId) {
       Tasks.update(taskId, {$set: { iteration: newIter } });
     });
+  },
+  createNewTeam(teamName){
+    Tasks.insert({name: teamName});
   }
 });
