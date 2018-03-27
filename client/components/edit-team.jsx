@@ -1,5 +1,6 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
+import { Team } from '../../imports/collections.js';
 
 class EditTeam extends React.Component{
   constructor(props){
@@ -24,19 +25,35 @@ class EditTeam extends React.Component{
     return <div key={mem.id}>{mem.name}<i className="action-icon fa fa-times" onClick={()=>this.onRemoveMember(mem.id)}></i></div>;
   }
   render(){
-    let {team} = this.props;
+    let { teamUsers, user, team} = this.props;
+    let teamName = team? team.name: null;
+    let isAdmin = user && user.info? user.info.isAdmin : false;
 
     return <div className="edit-team">
-      <h3>Team</h3>
-      <div className="team-list">{ team.map(el=> this.renderMember(el) ) }</div>
-      <input placeholder="John Smith" ref={ x=> this.nameInput = x }/>
-      <button onClick={this.onSave}>Save</button>
+      { teamName ? <h3>{teamName}</h3> : <span><i>There is no team associated with the current user.</i></span>}
+      { (!teamName && !isAdmin) ? <span><i> Please contact your system administrator.</i></span> : '' }
+      { (!teamName &&  isAdmin) ? <div>
+                                    <input placeholder='New team'/>
+                                    <button>Add new team</button>
+                                  </div> : '' }
+      { teamName ? <div className="team-list">{ teamUsers.map(el=> this.renderMember(el) ) }</div> : '' }
+      { (teamName && isAdmin) ? <div>
+                                  <input placeholder="John Smith" ref={ x=> this.nameInput = x }/>
+                                  <button onClick={this.onSave}>Save</button>
+                                </div> : ''}  
     </div>
    }
 }
 
 export default withTracker(props=>{
-  let team = Meteor.users.find().fetch();
-  team = team.map(el=>{ return {id: el._id, name: el.info.name} });
-  return { team };
+  Meteor.subscribe('Team');
+
+  let teamUsers = Meteor.users.find().fetch();
+  teamUsers = teamUsers.map(el=>{ return {id: el._id, name: el.info? el.info.name: ''} });
+
+  let user = Meteor.users.findOne({ _id: Meteor.userId() });
+  let teamId = user.info? user.info.teamId: null;
+  let team;
+  if(teamId) team = Team.findOne(teamId);
+  return { teamUsers, user, team };
 })(EditTeam)

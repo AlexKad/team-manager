@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { TeamMembers, Tasks, Tags } from '../imports/collections.js';
+import { Team, Tasks, Tags } from '../imports/collections.js';
 import './api';
 
 Meteor.startup(() => {
@@ -18,4 +18,5 @@ Meteor.startup(() => {
     else return [];
   })
   Meteor.publish('Tags', ()=> Tags.find());
+  Meteor.publish('Team', (teamId)=>{ Team.findOne(teamId); })
 });
