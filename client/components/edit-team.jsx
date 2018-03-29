@@ -10,6 +10,7 @@ class EditTeam extends React.Component{
     this.renderMember = this.renderMember.bind(this);
     this.onRemoveMember = this.onRemoveMember.bind(this);
     this.createNewTeam = this.createNewTeam.bind(this);
+    this.state = { team: props.team };
   }
   onSave(){
     let member = { name: this.nameInput.value };
@@ -24,16 +25,20 @@ class EditTeam extends React.Component{
   }
   createNewTeam(){
     let teamName=this.teamNameInput.value;
-    Meteor.call('createNewTeam', teamName, (err) => {
+    Meteor.call('createNewTeam', teamName, (err, team) => {
         if (err) { alert('There was an error trying to create new team.'); console.warn(err); }
-        else console.log('team saved');
+        else {
+          this.setState({team});
+          console.log('team saved');
+        }
     });
   }
   renderMember(mem){
     return <div key={mem.id}>{mem.name}<i className="action-icon fa fa-times" onClick={()=>this.onRemoveMember(mem.id)}></i></div>;
   }
   render(){
-    let { teamUsers, user, team} = this.props;
+    let { teamUsers, user } = this.props;
+    let { team } = this.state;
     let teamName = team? team.name: null;
     let isAdmin = user && user.info? user.info.isAdmin : false;
 

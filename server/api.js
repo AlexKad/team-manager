@@ -39,5 +39,6 @@ Meteor.methods({
     let teamId = Team.insert({name: teamName});
     let userId = Meteor.userId();
     Meteor.users.update(userId, { $set: { 'info.teamId': teamId } });
+    return Team.findOne(teamId);
   }
 });
