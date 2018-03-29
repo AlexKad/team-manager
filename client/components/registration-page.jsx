@@ -41,7 +41,7 @@ class _RegistrationForm extends React.Component {
       let  onLoading = this.props.onLoading || (() => {});
       onLoading(true);
       //TODO: remove teamId
-      let info = { name: this.state.name, isAdmin: false, teamId: 'test'}
+      let info = { name: this.state.name, isAdmin: true, teamId: 'test'}
       let user = {...this.state, username: this.state.email, info };
 
       Accounts.createUser(user, err => {

@@ -55,7 +55,6 @@ class EditTeam extends React.Component{
 
 export default withTracker(props=>{
   Meteor.subscribe('Team');
-
   let teamUsers = Meteor.users.find().fetch();
   teamUsers = teamUsers.map(el=>{ return {id: el._id, name: el.info? el.info.name: ''} });
 

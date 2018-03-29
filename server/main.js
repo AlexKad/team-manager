@@ -18,5 +18,5 @@ Meteor.startup(() => {
     else return [];
   })
   Meteor.publish('Tags', ()=> Tags.find());
-  Meteor.publish('Team', (teamId)=>{ Team.findOne(teamId); })
+  Meteor.publish('Team', ()=> Team.find());
 });

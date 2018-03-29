@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { Tasks, Tags} from '../imports/collections.js';
+import { Tasks, Team, Tags} from '../imports/collections.js';
 import { statuses } from '../imports/constants.js';
 import _ from 'lodash';
 
@@ -36,6 +36,8 @@ Meteor.methods({
     });
   },
   createNewTeam(teamName){
-    Tasks.insert({name: teamName});
+    let teamId = Team.insert({name: teamName});
+    let userId = Meteor.userId();
+    Meteor.users.update(userId, { $set: { 'info.teamId': teamId } });
   }
 });
