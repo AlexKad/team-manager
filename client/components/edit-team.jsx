@@ -1,6 +1,7 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Team } from '../../imports/collections.js';
+import ModalWnd from './modal-wnd';
 
 class EditTeam extends React.Component{
   constructor(props){
@@ -10,6 +11,7 @@ class EditTeam extends React.Component{
     this.renderMember = this.renderMember.bind(this);
     this.onRemoveMember = this.onRemoveMember.bind(this);
     this.createNewTeam = this.createNewTeam.bind(this);
+    this.onInviteUser = this.onInviteUser.bind(this);
     this.state = { team: props.team };
   }
   componentWillReceiveProps(nextProps){
@@ -21,6 +23,9 @@ class EditTeam extends React.Component{
     let member = { name: this.nameInput.value };
     //TODO
     this.nameInput.value = '';
+  }
+  onInviteUser(){
+    // TODO: allow to invite user by email. Check if user email already exists in users collection
   }
   onRemoveMember(id){
     let flag = confirm('Are you sure you want to remove this team member?');
@@ -43,9 +48,10 @@ class EditTeam extends React.Component{
   }
   render(){
     let { teamUsers, user } = this.props;
-    let { team } = this.state;
+    let { team, showInviteWindow } = this.state;
     let teamName = team? team.name: null;
     let isAdmin = user && user.info? user.info.isAdmin : false;
+    teamUsers = teamUsers.filter((el)=>{ return el.id!=Meteor.userId() });
 
     return <div className="edit-team">
       { teamName ? <h3>{teamName}</h3> : <span><i>There is no team associated with the current user.</i></span>}
@@ -56,9 +62,20 @@ class EditTeam extends React.Component{
                                   </div> : '' }
       { teamName ? <div className="team-list">{ teamUsers.map(el=> this.renderMember(el) ) }</div> : '' }
       { (teamName && isAdmin) ? <div>
+                                  {/* <i className="fa fa-user"></i>
                                   <input placeholder="John Smith" ref={ x=> this.nameInput = x }/>
-                                  <button onClick={this.onSave}>Save</button>
+                                  <button onClick={this.onSave}>Add</button> */}
+
+                                  <button onClick={()=>this.setState({showInviteWindow: !this.state.showInviteWindow})}>
+                                    <i className="fa fa-user"></i> Invite new user
+                                  </button>
                                 </div> : ''}
+        { showInviteWindow?
+          <ModalWnd title='Invite new user' onClose={()=>this.setState({showInviteWindow:false})}>
+            <input placeholder="John Smith" ref={ x=> this.nameInput = x }/>
+            <button onClick={this.onInviteUser}>Add</button>
+          </ModalWnd> : ''
+        }
     </div>
    }
 }
