@@ -12,6 +12,11 @@ class EditTeam extends React.Component{
     this.createNewTeam = this.createNewTeam.bind(this);
     this.state = { team: props.team };
   }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.team && !this.state.team){
+      this.setState({ team: nextProps.team });
+    }
+  }
   onSave(){
     let member = { name: this.nameInput.value };
     //TODO
