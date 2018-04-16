@@ -18,6 +18,7 @@ class DashboardPage extends React.Component{
     this.onAddTaskClick = this.onAddTaskClick.bind(this);
     this.onEditTask = this.onEditTask.bind(this);
     this.onCloseEditWnd = this.onCloseEditWnd.bind(this);
+    this.onlogOut = this.onlogOut.bind(this);
   }
   openTaskDetails(id){
     this.props.history.push('/details?'+id);
@@ -31,10 +32,27 @@ class DashboardPage extends React.Component{
   onCloseEditWnd(){
     this.setState({ editTaskId: null, showEditTaskWindow: false})
   }
+  onlogOut(){
+    Meteor.logout(err => {
+      if (!err) this.props.history.push('/page/login');
+    });
+  }
   render(){
     let { showEditTaskWindow, editTaskId }= this.state;
+    let user = this.props.currentUser;
+    const userName = (user && user.info && user.info.name)?
+                            user.info.name : 'Profile';
+    const isAdmin = user && user.info && user.info.isAdmin;
+
     return <div className='dashboard-page'>
-      <div><h2>Team Task Manager</h2></div>
+
+      <div className='top-nav'>
+        <div>Team Task Manager</div>
+        <div className='profile'>
+          <span><i className='fa fa-user-circle' />{userName}</span>
+          <i className='fa fa-sign-out' onClick={this.onlogOut}> </i>
+        </div>
+      </div>
       <button onClick={this.onAddTaskClick}><i className='fa fa-plus-circle'></i>Add new</button>
 
       <TabContainer>
@@ -48,9 +66,9 @@ class DashboardPage extends React.Component{
           <EditTeam />
           {/* TODO: add workload chart */}
         </Tab>
-        <Tab title="All tasks">
+        {/* <Tab title="All tasks">
           <TasksGrid onTaskClick={this.openTaskDetails}/>
-        </Tab>
+        </Tab> */}
       </TabContainer>
 
       { showEditTaskWindow?
@@ -67,7 +85,8 @@ var DPage = withTracker(props => {
   Meteor.subscribe('Tasks');
   Meteor.subscribe('Tags');
   Meteor.subscribe('Meteor.users');
-  return { };
+  let user = Meteor.users.findOne({ _id: Meteor.userId() });
+  return { currentUser: user };
 })(DashboardPage);
 
 export default withRouter(DPage);
