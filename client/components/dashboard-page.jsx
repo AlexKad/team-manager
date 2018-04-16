@@ -7,6 +7,7 @@ import EditTeam from './edit-team';
 import SprintDashboard from './sprint-dashboard';
 import PlanSprintBoard from './plan-sprint';
 import ModalWnd from './modal-wnd';
+import GanttChart from './gantt-chart';
 import { TabContainer, Tab } from './tab-container';
 import { Iterations } from '../../imports/collections.js';
 
@@ -70,6 +71,9 @@ class DashboardPage extends React.Component{
         {/* <Tab title="All tasks">
           <TasksGrid onTaskClick={this.openTaskDetails}/>
         </Tab> */}
+        <Tab title="Gantt chart">
+          <GanttChart />
+        </Tab>
       </TabContainer>
 
       { showEditTaskWindow?
