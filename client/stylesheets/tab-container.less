@@ -1,8 +1,10 @@
 .tab-container{
+  flex:1;
 
   .tabs{
     // margin:15px 0;
     border-bottom: 3px solid #ddd;
+    flex-direction: row;
 
     button{ margin: 0;}
     .tab-btn{
@@ -21,6 +23,7 @@
   }
   .current-tab {
     background: #fff;
-    min-height:500px;
+    flex:1;
+    &>div{ flex: 1;}
    }
 }

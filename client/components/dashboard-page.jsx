@@ -53,7 +53,8 @@ class DashboardPage extends React.Component{
           <i className='fa fa-sign-out' onClick={this.onlogOut}> </i>
         </div>
       </div>
-      <button onClick={this.onAddTaskClick}><i className='fa fa-plus-circle'></i>Add new</button>
+      <button className='edit-task-btn' onClick={this.onAddTaskClick}>
+        <i className='fa fa-plus-circle'></i>Add new</button>
 
       <TabContainer>
         <Tab title="Current Sprint">

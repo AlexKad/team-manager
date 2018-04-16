@@ -2,20 +2,18 @@
 .plan-sprint{
   margin: 10px 0;
   padding: 20px;
+  flex: 1;
 
   i.fa{ cursor: pointer; }
 }
 .sprint-dashboard,
 .plan-sprint-board{
-  display: flex;
   flex-direction: row;
+  flex:1;
 
   &>div{
-    display: flex;
-    flex-direction: column;
     padding: 10px;
     text-align: center;
-    flex: 1;
   }
   &>div.buttons{
     flex:0;
@@ -26,8 +24,8 @@
   .box{
     border: 1px dashed #999;
     min-height: 400px;
-    max-height: 430px;
     overflow: scroll;
+    flex: 1;
 
      &.middle{
        border-left:0px;
