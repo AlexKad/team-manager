@@ -82,7 +82,7 @@ class _RegistrationForm extends React.Component {
       <input type="password" placeholder="Confirm Password"
         onInput={(e)=> this.inputHandler(e, 'confirm')}></input>
       <span className="error">{this.state.error}</span>
-      <div>
+      <div className="buttons">
         <button className="save-btn" onClick={this.saveNew}>Save</button>
         <button className="cancel" onClick={this.onCancel}>Cancel</button>
       </div>

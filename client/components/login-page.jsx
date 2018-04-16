@@ -62,7 +62,7 @@ class _LoginForm extends React.Component {
       <input placeholder="password" type="password" autoComplete="current-password"
         onInput={(e)=> this.setState({ 'password': e.target.value })} />
       <span className="error">{this.state.error}</span>
-      <div>
+      <div className='buttons'>
         <button type="submit" className="submit-btn">Login</button>
         <button type="button" onClick={this.registerNew} className="register-btn">Register</button>
       </div>
