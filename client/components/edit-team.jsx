@@ -53,8 +53,14 @@ class EditTeam extends React.Component{
     });
   }
   renderMember(mem,isAdmin){
-    return <div key={mem.id}>
-      {mem.name} {isAdmin && <i className="action-icon fa fa-times" onClick={()=>this.onRemoveMember(mem.id)}></i> }
+    return <div key={mem.id} className='user'>
+      <i className="fa fa-user"/>
+      <div className='name'>
+        <span>{mem.name}</span>
+        <span className='role'>{mem.isAdmin? 'admin' : ''}</span>
+      </div>
+      <button className='light-btn'>{ mem.isAdmin? 'remove':'assign'} admin role</button>
+      {isAdmin && <i className="action-icon fa fa-times" onClick={()=>this.onRemoveMember(mem.id)}></i> }
     </div>;
   }
   render(){
@@ -79,7 +85,7 @@ class EditTeam extends React.Component{
                                 </div> : ''}
         { showInviteWindow?
           <ModalWnd title='Invite new user' onClose={()=>this.setState({showInviteWindow:false})}>
-            <input placeholder="John Smith" ref={ x=> this.nameInput = x }/>
+            <input placeholder="smith@gmail.com" ref={ x=> this.nameInput = x }/>
             <button onClick={this.onInviteUser}>Add</button>
           </ModalWnd> : ''
         }
@@ -90,7 +96,11 @@ class EditTeam extends React.Component{
 export default withTracker(props=>{
   Meteor.subscribe('Team');
   let teamUsers = Meteor.users.find().fetch();
-  teamUsers = teamUsers.map(el=>{ return {id: el._id, name: el.info? el.info.name: ''} });
+  teamUsers = teamUsers.map(el=>{ return {
+    id: el._id,
+    name: el.info? el.info.name: '',
+    isAdmin: el.info&&el.info.isAdmin}
+  });
 
   let user = Meteor.users.findOne({ _id: Meteor.userId() });
   let teamId = user && user.info? user.info.teamId: null;
