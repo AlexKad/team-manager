@@ -35,10 +35,36 @@ Meteor.methods({
       Tasks.update(taskId, {$set: { iteration: newIter } });
     });
   },
-  createNewTeam(teamName){
+  createNewTeam: (teamName)=>{
     let teamId = Team.insert({name: teamName});
     let userId = Meteor.userId();
     Meteor.users.update(userId, { $set: { 'info.teamId': teamId } });
     return Team.findOne(teamId);
+  },
+  inviteNewTeamUser:(userMail)=>{
+    let userId = Meteor.userId();
+    let user = Meteor.users.findOne(userId);
+    let isAdmin = user && user.info && user.info.isAdmin;
+    if(!isAdmin) throw new Meteor.Error('This operation allowed only for admin user. Current user is not an admin.');
+
+    let teamId = user.info.teamId;
+    if(!teamId) throw new Meteor.Error('There is no team associated with current user. Please create new teambefore invite.');
+
+    let newUser = Meteor.users.findOne({username: userMail});
+    if(newUser) {
+      Meteor.users.update(newUser._id, { $set: { 'info.teamId': teamId } });
+    }
+    else{
+      //TODO: send an invitation by email
+      return '/registration&teamId='+teamId;
+    }
+  },
+  removeUserFromTeam: (userId)=>{
+    let currentUserId = Meteor.userId();
+    let currentUser = Meteor.users.findOne(currentUserId);
+    let isAdmin = currentUser && currentUser.info && currentUser.info.isAdmin;
+    if(!isAdmin) throw new Meteor.Error('This operation allowed only for admin user. Current user is not an admin.');
+
+    Meteor.users.update(userId, { $set: { 'info.teamId': '' } });
   }
 });
