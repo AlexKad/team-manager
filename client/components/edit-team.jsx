@@ -73,7 +73,7 @@ class EditTeam extends React.Component{
     return <div className="edit-team">
       { teamName ? <h3>{teamName}</h3> : <span><i>There is no team associated with the current user.</i></span>}
       { (!teamName && !isAdmin) ? <span><i> Please contact your system administrator.</i></span> : ''}
-      { (!teamName &&  isAdmin) ?  <div>
+      { (!teamName &&  isAdmin) ?  <div className="input-row">
                                     <input placeholder='New team' ref={ x=> this.teamNameInput = x }/>
                                     <button onClick={this.createNewTeam}>Create new team</button>
                                   </div> : ''}
@@ -95,6 +95,7 @@ class EditTeam extends React.Component{
 
 export default withTracker(props=>{
   Meteor.subscribe('Team');
+  Meteor.subscribe('Meteor.users');
   let teamUsers = Meteor.users.find().fetch();
   teamUsers = teamUsers.map(el=>{ return {
     id: el._id,

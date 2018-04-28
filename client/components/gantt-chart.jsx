@@ -14,8 +14,8 @@ import Dropdown from './dropdown';
     return <div className='gantt-chart'>
         <div className='input-group'>
           <label>Start from:</label>
-          <input type='date'/> -
-          <label>Till:</label>
+          <input type='date'/>
+          <label> - Till:</label>
           <input type='date'/>
         </div>
         <div className='chart-panel'>
