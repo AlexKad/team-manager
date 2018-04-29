@@ -1,7 +1,8 @@
+@import './variables.less';
 .task{
   margin: 10px 0;
   border: 1px solid #eee;
-  background: #dedede;
+  background: #f4f4f4;
   padding:7px;
   text-align: left;
   cursor: pointer;
@@ -23,16 +24,16 @@
     right:5px;
     font-size: 20px;
   }
-  .red { color: orangered }
+  .red { color: @orange; }
   .green { color: green; }
-  .blue { color: cornflowerblue; }
+  .blue { color: @blue; }
   span.fa{ margin:0 }
   i.edit{
     position: absolute;
     right: 5px;
     bottom:10px;
     cursor: pointer;
-    color: #307899;
+    color: @blue;
     font-size: 20px;
     &:hover { color: #1d6079; }
   }
@@ -41,8 +42,8 @@
     margin: 10px 5px;
     padding: 2px 5px;
     font-weight: 100;
-    color: antiquewhite;
+    color: #fff;
     letter-spacing: 1px;
-    background: forestgreen;
+    background: @blue;
   }
 }

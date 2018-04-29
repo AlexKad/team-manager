@@ -59,7 +59,7 @@ class Task extends React.Component{
 
 export default withTracker(props=>{
   let team = Meteor.users.find().fetch() || [];
-  let teamList =  team.map(el=>{ return {id: el._id, name: el.info.name} });
+  let teamList =  team.map(el=>{ return {id: el._id, name: el.info? el.info.name: ''} });
   teamList.push({id:'', name:''});
   return { teamList };
 })(Task)

@@ -14,7 +14,8 @@ import { Iterations } from '../../imports/collections.js';
 class DashboardPage extends React.Component{
   constructor(props){
     super(props);
-    this.state = { showEditTaskWindow: false, editTaskId: null };
+    this.state = { showEditTaskWindow: false, editTaskId: null, view: 'current-sprint' };
+    this._renderMainView = this._renderMainView.bind(this);
     this.openTaskDetails = this.openTaskDetails.bind(this);
     this.onAddTaskClick = this.onAddTaskClick.bind(this);
     this.onEditTask = this.onEditTask.bind(this);
@@ -38,11 +39,25 @@ class DashboardPage extends React.Component{
       if (!err) this.props.history.push('/page/login');
     });
   }
+  _renderMainView(){
+    let view = this.state.view;
+    switch(view){
+      case 'current-sprint':
+        return <SprintDashboard iteration={Iterations[0]} onEditTask={ this.onEditTask}></SprintDashboard>;
+      case 'next-sprint':
+       return <PlanSprintBoard iteration={Iterations[1]} onEditTask={ this.onEditTask}></PlanSprintBoard>;
+      case 'team':
+        return <EditTeam />;
+      case 'gantt-chart':
+        return <GanttChart />;
+      default:
+        return <SprintDashboard iteration={Iterations[0]} onEditTask={ this.onEditTask}></SprintDashboard>;
+    }
+  }
   render(){
     let { showEditTaskWindow, editTaskId }= this.state;
     let user = this.props.currentUser;
-    const userName = (user && user.info && user.info.name)?
-                            user.info.name : 'Profile';
+    const userName = (user && user.info && user.info.name)? user.info.name : 'Profile';
     const isAdmin = user && user.info && user.info.isAdmin;
 
     return <div className='dashboard-page'>
@@ -54,27 +69,24 @@ class DashboardPage extends React.Component{
           <i className='fa fa-sign-out' onClick={this.onlogOut}> </i>
         </div>
       </div>
-      <button className='edit-task-btn' onClick={this.onAddTaskClick}>
-        <i className='fa fa-plus-circle'></i>Add new</button>
 
-      <TabContainer>
-        <Tab title="Current Sprint">
-          <SprintDashboard iteration={Iterations[0]} onEditTask={ this.onEditTask}></SprintDashboard>
-        </Tab>
-        <Tab title="Plan Next Sprint">
-          <PlanSprintBoard iteration={Iterations[1]} onEditTask={ this.onEditTask}></PlanSprintBoard>
-        </Tab>
-        <Tab title="Team & Workload">
-          <EditTeam />
-          {/* TODO: add workload chart */}
-        </Tab>
-        {/* <Tab title="All tasks">
-          <TasksGrid onTaskClick={this.openTaskDetails}/>
-        </Tab> */}
-        <Tab title="Gantt chart">
-          <GanttChart />
-        </Tab>
-      </TabContainer>
+      <div className='row navigation'>
+        <button className='edit-task-btn' onClick={this.onAddTaskClick}>
+          <i className='fa fa-plus-circle'></i>Add new</button>
+
+          <div className='row navigation-btn'>
+            <button onClick={()=>this.setState({'view': 'current-sprint'})}>
+              <i className="fa fa-calendar-o"/>Current Sprint</button>
+            <button onClick={()=>this.setState({'view': 'next-sprint'})}>
+              <i className="fa fa-calendar" />Plan Next Sprint</button>
+            <button onClick={()=>this.setState({'view': 'team'})}>
+              <i className="fa fa-users" />Team & Workload</button>
+            <button onClick={()=>this.setState({'view': 'gantt-chart'})}>
+              <i className="fa fa-bar-chart-o" />Gantt Chart</button>
+          </div>
+      </div>
+
+      { this._renderMainView() }
 
       { showEditTaskWindow?
         <ModalWnd title={ editTaskId? 'Edit task' : 'Add task'} onClose={this.onCloseEditWnd}>
