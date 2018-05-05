@@ -15,7 +15,7 @@ import Dropdown from './dropdown';
         <div className='input-group'>
           <label>Start from:</label>
           <input type='date'/>
-          <label> - Till:</label>
+          <label> till:</label>
           <input type='date'/>
         </div>
         <div className='chart-panel'>

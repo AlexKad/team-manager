@@ -30,8 +30,9 @@ function calculateIterations(){
   let offset = now.getDay();
   let start = new Date();
   let end = new Date();
+
   start.setDate(now.getDate() - offset+1);
-  end.setDate(start.getDate()+4);
+  end.setDate(now.getDate() - offset+5);
 
   let sprint1 = start.toLocaleDateString() + ' - ' + end.toLocaleDateString();
   start.setDate(start.getDate()+7);
