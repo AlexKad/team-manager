@@ -4,6 +4,7 @@ import { Tasks, Iterations } from '../../imports/collections.js';
 import { types, statuses, priorities } from '../../imports/constants.js';
 import Task from './task';
 import Dropdown from './dropdown';
+import helper from '../../imports/lib.js';
 
  class GanttChart extends React.Component{
   constructor(props){
@@ -12,17 +13,13 @@ import Dropdown from './dropdown';
   }
   dateChanged(val, field){
     let { start, end } = this.state;
-    if(!val){
-      let obj = {};
-      obj[field] = '';
-      obj.dateError = ''
-      this.setState(obj);
-      return;
+    let date;
+    if(!val){ date = ''; }
+    else{
+      date = new Date(val);
+      date.setDate(date.getUTCDate());
+      date = date.getTime();
     }
-    let date = new Date(val);
-    date.setDate(date.getUTCDate());
-    date = date.getTime();
-
     if(field == 'end' && start && start>date){
       this.setState({dateError: 'Start date should be earlier then end date'});
       return;
@@ -31,6 +28,12 @@ import Dropdown from './dropdown';
     obj[field] = date;
     obj.dateError = '';
     this.setState(obj);
+    if(start && end) this.filterTasks();
+  }
+  filterTasks(){
+    let { start, end } = this.state;
+    let iterations= helper.getIterations(start, end);
+    console.log(iterations);
   }
   render(){
     let { dateError } = this.state;
