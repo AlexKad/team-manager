@@ -48,11 +48,13 @@ class Task extends React.Component{
            { this.renderTag(task.tag) } </h4>
 
       <h4> { task.name }</h4>
-      <div>Assigned to:
+      <div className='assignedTo'>Assigned to:
         <Dropdown items={teamList} onChange={this.assignedToChanged} selected={task.assignedTo}/>
       </div>
-      <div>{task.iteration}</div>
-      <div><i className="edit fa fa-edit" onClick={(e)=>this.props.onEdit(task._id)}></i></div>
+      <div className='iteration'>{task.iteration}</div>
+      {this.props.onEdit &&
+        <div><i className="edit fa fa-edit" onClick={(e)=>this.props.onEdit(task._id)}></i></div>
+      }
     </div>
   }
 }
