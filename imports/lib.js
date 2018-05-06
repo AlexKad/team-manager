@@ -16,10 +16,34 @@ function getIterations(start, end){
   }
   return iterations;
 }
+function filterOutWeekends(startDate, endDate){
+  let filteredDates = [];
+   let date = new Date(startDate);
+   let eDate = new Date(endDate);
+   eDate.setDate(eDate.getDate()+1);
+
+   while(date.getTime() != eDate.getTime()){
+     if(date.getUTCDay() != 0 && date.getUTCDay() != 6){
+       filteredDates.push((new Date(date)).getTime());
+     }
+     date.setDate(date.getDate()+1);
+   }
+   return filteredDates;
+}
+function displayDateFromMs(ms){
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fr', 'Sat'];
+  let date = new Date(ms);
+  let month = date.getMonth()+1;
+  let day = date.getDate();
+  let dayOfTheWeek = weekDays[date.getDay()];
+  return dayOfTheWeek+ ' ' + month +'/' + day;
+}
 
 const helper = (function() {
   return {
-     getIterations: getIterations
+     getIterations: getIterations,
+     filterOutWeekends: filterOutWeekends,
+     displayDateFromMs: displayDateFromMs
   }
 })();
 
