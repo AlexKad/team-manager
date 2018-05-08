@@ -36,6 +36,7 @@ class Task extends React.Component{
   onDrag(e){
     let data = JSON.stringify({ taskId: this.props.task._id });
     e.dataTransfer.setData("text", data);
+    if(this.props.onDrag) this.props.onDrag(e);
   }
   onCheck(e){
     this.props.onTaskCheck(this.props.task._id, e.target.checked);

@@ -7,7 +7,7 @@ import Dropdown from './dropdown';
 import helper from '../../imports/lib.js';
 import _ from 'lodash';
 
-const DATE_BOX_WIDTH = 70;
+const DATE_BOX_WIDTH = 80;
 
 class GanttChart extends React.Component{
   constructor(props){
@@ -54,8 +54,12 @@ class GanttChart extends React.Component{
   }
   renderChart(){
     let { selectedTasks } = this.state;
-    console.log(selectedTasks);
-    return null;
+    return selectedTasks.map((task,i)=>{
+      return <div className='chart-task'
+        style={{ left: (task.start+1)*DATE_BOX_WIDTH, top: i*40}}>
+        task
+      </div>
+    })
   }
   renderTaskList(){
     let {start, end, tasks } = this.state;
@@ -63,7 +67,7 @@ class GanttChart extends React.Component{
     if(!tasks) return <div className='empty'>There are no tasks in the selected time interval.</div>;
 
     return tasks.map(el=>
-      <Task task={el} key={el._id} allowDrag={true}/>
+      <Task task={el} key={el._id} allowDrag={true} onDrag={this.onDrag.bind(this)}/>
     );
   }
   onDragOver(e){
@@ -74,14 +78,25 @@ class GanttChart extends React.Component{
     const stringified = e.dataTransfer.getData("text");
     if (!stringified) return;
 
+    let pos = JSON.parse(e.dataTransfer.getData("pos"));
+    let x = e.clientX - pos.x;
+    let y = e.clientY - pos.y;
+
+    let start = Math.floor(x/DATE_BOX_WIDTH);
+
     const data = JSON.parse(stringified);
     let selectedTasks = this.state.selectedTasks;
     if(!_.find(selectedTasks,el=>el.taskId == data.taskId)){
-      selectedTasks.push(data);
+      selectedTasks.push({taskId: data.taskId, start: start});
       this.setState(selectedTasks);
     }
-
     e.dataTransfer.clearData();
+  }
+  onDrag(e){
+    let data = {x: (e.offsetX || e.clientX - $(e.target).offset().left),
+                y: (e.offsetY || e.clientY - $(e.target).offset().top) };
+
+    e.dataTransfer.setData("pos",JSON.stringify(data));
   }
   render(){
     let { dateError, selectedTasks } = this.state;

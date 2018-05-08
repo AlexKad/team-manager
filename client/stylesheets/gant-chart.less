@@ -24,8 +24,8 @@
     .dates{
       flex:1;
       .date-box{
-        width:70px;
-        flex:1;
+        flex-shrink: 0;
+        width:80px;
         padding:5px 0px;
         border-right: 1px dashed #aaa;
         &:last-of-type{ border-right: none;}
@@ -51,6 +51,15 @@
       font-weight: lighter;
       align-items: center;
       justify-content: center;
+    }
+  }
+  .chart{
+    position: relative;
+    .chart-task{
+      position: absolute;
+      width:60px;
+      height: 40px;
+      background-color: pink;
     }
   }
   .error{
