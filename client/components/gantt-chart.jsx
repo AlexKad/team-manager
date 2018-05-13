@@ -102,11 +102,24 @@ class GanttChart extends React.Component{
     }
     e.dataTransfer.clearData();
   }
+  onTaskDrop(e){
+    e.preventDefault();
+    const stringified = e.dataTransfer.getData("text");
+    if (!stringified) return;
+
+    const data = JSON.parse(stringified);
+    if(data.startInd == undefined) return;
+    let { tasks, selectedTasks }  = this.state;
+    let task = selectedTasks.find(el=> el._id == data._id);
+    selectedTasks= selectedTasks.filter(el=> el._id != data._id);
+    tasks.push(task);
+    this.setState({tasks, selectedTasks});
+  }
   onTaskDrag(e){
     this.setPosition(e);
   }
   onChartTaskDrag(e,task){
-    let data = JSON.stringify({ taskId: task._id });
+    let data = JSON.stringify(task);
     e.dataTransfer.setData("text", data);
     this.setPosition(e);
   }
@@ -134,7 +147,8 @@ class GanttChart extends React.Component{
             { chartIsEmpty? 'Drag n drop tasks here from the list below.' : this.renderChart() }
           </div>
         </div>
-        <div className='tasks'>
+        <div className='tasks' onDragOver={ this.onDragOver.bind(this) }
+          onDrop={this.onTaskDrop.bind(this)}>
           { this.renderTaskList() }
         </div>
     </div>
