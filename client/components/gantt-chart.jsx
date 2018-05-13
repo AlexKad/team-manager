@@ -45,7 +45,7 @@ class GanttChart extends React.Component{
     if(start && end){
       let dates = helper.filterOutWeekends(new Date(start), new Date(end));
       return <div className="dates row">
-        {dates.map(el=><div className="date-box">
+        {dates.map(el=><div className="date-box" key={el}>
           <span className='name'>{helper.displayDateFromMs(el)}</span>
         </div>)}
       </div>
@@ -55,7 +55,7 @@ class GanttChart extends React.Component{
   renderChart(){
     let { selectedTasks } = this.state;
     return selectedTasks.map((task,i)=>{
-      return <div className='chart-task'
+      return <div className='chart-task' key={i}
         style={{ left: (task.start+1)*DATE_BOX_WIDTH, top: i*40}}>
         task
       </div>
