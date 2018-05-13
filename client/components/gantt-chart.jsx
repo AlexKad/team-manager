@@ -13,6 +13,8 @@ class GanttChart extends React.Component{
   constructor(props){
     super(props);
     this.state = { tasks: [], selectedTasks:[] }
+    this.onChartTaskDrag = this.onChartTaskDrag.bind(this);
+    this.setPosition = this.setPosition.bind(this);
   }
   dateChanged(val, field){
     let { start, end } = this.state;
@@ -55,9 +57,9 @@ class GanttChart extends React.Component{
   renderChart(){
     let { selectedTasks } = this.state;
     return selectedTasks.map((task,i)=>{
-      return <div className='chart-task' key={i}
-        style={{ left: (task.start+1)*DATE_BOX_WIDTH, top: i*40}}>
-        task
+      return <div className='chart-task' key={i} draggable={true} onDragStart={(e)=>this.onChartTaskDrag(e,task)}
+        style={{ left: task.startInd*DATE_BOX_WIDTH, top: i*40}}>
+          { task.name }
       </div>
     })
   }
@@ -67,13 +69,13 @@ class GanttChart extends React.Component{
     if(!tasks) return <div className='empty'>There are no tasks in the selected time interval.</div>;
 
     return tasks.map(el=>
-      <Task task={el} key={el._id} allowDrag={true} onDrag={this.onDrag.bind(this)}/>
+      <Task task={el} key={el._id} allowDrag={true} onDrag={this.onTaskDrag.bind(this)}/>
     );
   }
   onDragOver(e){
     e.preventDefault();
   }
-  onDrop(e){
+  onChartDrop(e){
     e.preventDefault();
     const stringified = e.dataTransfer.getData("text");
     if (!stringified) return;
@@ -86,17 +88,32 @@ class GanttChart extends React.Component{
 
     const data = JSON.parse(stringified);
     let selectedTasks = this.state.selectedTasks;
-    if(!_.find(selectedTasks,el=>el.taskId == data.taskId)){
-      selectedTasks.push({taskId: data.taskId, start: start});
+    if(!_.find(selectedTasks,el=>el._id == data.taskId)){
+      let task = _.find(this.state.tasks, el=> el._id == data.taskId);
+      task.startInd = start;
+      selectedTasks.push(task);
+
+      let tasks = this.state.tasks.filter(el=> el._id != data.taskId);
+      this.setState({selectedTasks, tasks});
+    }else{
+      let task = _.find(selectedTasks,el=>el._id == data.taskId);
+      task.startInd = start;
       this.setState(selectedTasks);
     }
     e.dataTransfer.clearData();
   }
-  onDrag(e){
-    let data = {x: (e.offsetX || e.clientX - $(e.target).offset().left),
-                y: (e.offsetY || e.clientY - $(e.target).offset().top) };
-
-    e.dataTransfer.setData("pos",JSON.stringify(data));
+  onTaskDrag(e){
+    this.setPosition(e);
+  }
+  onChartTaskDrag(e,task){
+    let data = JSON.stringify({ taskId: task._id });
+    e.dataTransfer.setData("text", data);
+    this.setPosition(e);
+  }
+  setPosition(e){
+    let position = {x: (e.offsetX || e.clientX - $(e.target).offset().left),
+                    y: (e.offsetY || e.clientY - $(e.target).offset().top) };
+    e.dataTransfer.setData("pos",JSON.stringify(position));
   }
   render(){
     let { dateError, selectedTasks } = this.state;
@@ -113,7 +130,7 @@ class GanttChart extends React.Component{
         <div className='chart-panel'>
           { this.renderDates() }
           <div className={chartIsEmpty? 'empty-chart': 'chart'}
-               onDragOver={ this.onDragOver.bind(this) } onDrop={ this.onDrop.bind(this) }>
+               onDragOver={ this.onDragOver.bind(this) } onDrop={ this.onChartDrop.bind(this) }>
             { chartIsEmpty? 'Drag n drop tasks here from the list below.' : this.renderChart() }
           </div>
         </div>
