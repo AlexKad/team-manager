@@ -40,7 +40,7 @@ class _RegistrationForm extends React.Component {
       if (this.state.error != '') return;
       let  onLoading = this.props.onLoading || (() => {});
       onLoading(true);
-      let info = { name: this.state.name, isAdmin: false}
+      let info = { name: this.state.name, isAdmin: true}
       let user = {...this.state, username: this.state.email, info };
 
       Accounts.createUser(user, err => {

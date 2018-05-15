@@ -7,7 +7,7 @@ import Dropdown from './dropdown';
 import helper from '../../imports/lib.js';
 import _ from 'lodash';
 
-const DATE_BOX_WIDTH = 80;
+const DATE_BOX_WIDTH = 81;
 
 class GanttChart extends React.Component{
   constructor(props){
@@ -57,8 +57,9 @@ class GanttChart extends React.Component{
   renderChart(){
     let { selectedTasks } = this.state;
     return selectedTasks.map((task,i)=>{
+      let width = task.workTime? task.workTime/8*DATE_BOX_WIDTH : DATE_BOX_WIDTH;
       return <div className='chart-task' key={i} draggable={true} onDragStart={(e)=>this.onChartTaskDrag(e,task)}
-        style={{ left: task.startInd*DATE_BOX_WIDTH, top: i*40}}>
+        style={{ left: task.startInd*DATE_BOX_WIDTH, top: i*40, width }}>
           { task.name }
       </div>
     })
