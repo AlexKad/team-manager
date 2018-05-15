@@ -28,7 +28,7 @@ class EditTeam extends React.Component{
     let userMail = this.nameInput.value;
     Meteor.call('inviteNewTeamUser', userMail, (err, msg)=>{
       if(err){ alert('There was an error trying to invite new team user.'); console.warn(err); }
-      else if(msg) { alert('invitation was sent!'); console.log(msg); }
+      else if(msg) { alert(msg); }
       else alert('User is added to your team!');
     });
     this.setState({showInviteWindow: false});

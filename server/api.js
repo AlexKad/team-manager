@@ -57,7 +57,7 @@ Meteor.methods({
     }
     else{
       //TODO: send an invitation by email
-      return '/registration&teamId='+teamId;
+      return '/registration?teamId=' + teamId;
     }
   },
   removeUserFromTeam: (userId)=>{

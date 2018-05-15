@@ -2,8 +2,10 @@
 import React from 'react';
 import { Accounts } from 'meteor/accounts-base';
 import { withRouter } from 'react-router';
+import { withTracker } from 'meteor/react-meteor-data';
+import qs from 'qs';
 
-export class RegistrationPage extends React.Component {
+class _RegistrationPage extends React.Component {
   constructor() {
     super();
     this.state = {};
@@ -20,7 +22,7 @@ export class RegistrationPage extends React.Component {
       <div className="main-block">
         <div className="left-block"><h2>Task manager</h2></div>
         <div className="right-block">
-          <RegistrationForm onLoading={loading => this._onLoading(loading)} />
+          <RegistrationForm onLoading={loading => this._onLoading(loading)} teamId={this.props.teamId}/>
         </div>
       </div>
     </div>;
@@ -40,7 +42,11 @@ class _RegistrationForm extends React.Component {
       if (this.state.error != '') return;
       let  onLoading = this.props.onLoading || (() => {});
       onLoading(true);
-      let info = { name: this.state.name, isAdmin: true}
+      let info = { name: this.state.name, isAdmin: true };
+      if(this.props.teamId){
+        info.teamId = this.props.teamId;
+        info.isAdmin = false;
+      }
       let user = {...this.state, username: this.state.email, info };
 
       Accounts.createUser(user, err => {
@@ -91,3 +97,10 @@ class _RegistrationForm extends React.Component {
 }
 
 export var RegistrationForm = withRouter(_RegistrationForm);
+
+export var RegistrationPage = withRouter(
+  withTracker(props => {
+  let search = qs.parse(props.location.search.slice(1));
+
+  return { teamId: search.teamId };
+})(_RegistrationPage));

@@ -17,13 +17,12 @@ class AuthenticatedRoute extends Route {
     }
   }
 }
-
 class App extends React.Component {
   render() {
     return <BrowserRouter>
       <Switch>
         <Route path='/login' component={LoginPage}/>
-        <Route path='/registration' component={RegistrationPage}/>
+        <Route path='/registration/:teamId?' component={RegistrationPage}/>
         <AuthenticatedRoute path='/dashboard' component={DashboardPage}/>
         <AuthenticatedRoute path='/details' component={DetailsPage}/>
         <AuthenticatedRoute path='/team' component={ConfigurePage}/>
