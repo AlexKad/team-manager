@@ -1,6 +1,6 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Tasks, Iterations } from '../../imports/collections.js';
+import { Tasks, Iterations, GanttCharts } from '../../imports/collections.js';
 import { types, statuses, priorities } from '../../imports/constants.js';
 import Task from './task';
 import Dropdown from './dropdown';
@@ -15,9 +15,15 @@ const DATE_BOX_WIDTH = 81;
 class GanttChart extends React.Component{
   constructor(props){
     super(props);
-    this.state = { tasks: [], selectedTasks:[], showEditTaskWindow: false, editTaskId: null }
+    this.state = { tasks: [], selectedTasks:[],
+      showEditTaskWindow: false, editTaskId: null,
+      showChartsWindow: false }
     this.onEditTask = this.onEditTask.bind(this);
     this.onCloseEditWnd = this.onCloseEditWnd.bind(this);
+    this.onCloseChartWnd = this.onCloseChartWnd.bind(this);
+    this.saveChart = this.saveChart.bind(this);
+    this.openChart = this.openChart.bind(this);
+    this.onChartUpdate = this.onChartUpdate.bind(this);
   }
   onEditTask(taskId){
     this.setState({ editTaskId: taskId, showEditTaskWindow: true});
@@ -42,8 +48,26 @@ class GanttChart extends React.Component{
     obj.dateError = '';
     this.setState(obj);
   }
+  saveChart(){
+    let { start, end, selectedTasks } = this.state;
+    let chart = { start, end };
+    chart.taskIds = selectedTasks.map(el=>el._id);
+    Meteor.call('addGanttChart', chart, (err)=>{
+      if (err) { alert('There was an error trying to save chart.'); console.warn(err); }
+      else console.log('saved');
+    });
+  }
+  openChart(){
+    this.setState({showChartsWindow: true});
+  }
+  onCloseChartWnd(){
+    this.setState({showChartsWindow: false});
+  }
+  onChartUpdate(tasks){
+    this.setState({selectedTasks: tasks})
+  }
   render(){
-    let { dateError, start, end, showEditTaskWindow, editTaskId } = this.state;
+    let { dateError, start, end, showEditTaskWindow, editTaskId, showChartsWindow } = this.state;
 
     return <div className='gantt-chart'>
         <div className='input-group'>
@@ -52,12 +76,20 @@ class GanttChart extends React.Component{
           <label> till:</label>
           <input type='date' onChange={(e)=>this.dateChanged(e.target.value, 'end')}/>
           <span className='error'>{ dateError }</span>
+          <button className='right-btn' onClick={this.openChart}>Open...</button>
+          <button onClick={this.saveChart}>Save</button>
         </div>
 
-        <GanttChartPanel start={start} end={end} onEditTask={this.onEditTask} />
+        <GanttChartPanel start={start} end={end} onEditTask={this.onEditTask}
+        onChartUpdate={this.onChartUpdate}/>
         { showEditTaskWindow?
           <ModalWnd title='Edit task' onClose={this.onCloseEditWnd}>
             <EditTask taskId={editTaskId} editDone={this.onCloseEditWnd}/>
+          </ModalWnd> : ''
+        }
+        { showChartsWindow?
+          <ModalWnd title='Saved Charts' onClose={this.onCloseChartWnd}>
+
           </ModalWnd> : ''
         }
     </div>
@@ -68,8 +100,9 @@ export default withTracker(props=>{
   Meteor.subscribe('Tasks');
   Meteor.subscribe('Tags');
   Meteor.subscribe('Meteor.users');
+  Meteor.subscribe('GanttCharts');
   let user = Meteor.users.findOne({ _id: Meteor.userId() });
-
-  return {};
+  let charts = GanttCharts.find().fetch();
+  return { charts };
 
 })(GanttChart)

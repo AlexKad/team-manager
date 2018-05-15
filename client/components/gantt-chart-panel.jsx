@@ -88,6 +88,7 @@ class GanttChartPanel extends React.Component{
       this.setState(selectedTasks);
     }
     e.dataTransfer.clearData();
+    if(this.props.onChartUpdate) this.props.onChartUpdate(selectedTasks);
   }
   onTasksListDrop(e){
     e.preventDefault();
@@ -101,6 +102,7 @@ class GanttChartPanel extends React.Component{
     selectedTasks= selectedTasks.filter(el=> el._id != data._id);
     tasks.push(task);
     this.setState({tasks, selectedTasks});
+    if(this.props.onChartUpdate) this.props.onChartUpdate(selectedTasks);
   }
   onTaskDrag(e){
     this.setPosition(e);

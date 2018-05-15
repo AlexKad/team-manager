@@ -3,24 +3,32 @@ import { Mongo } from 'meteor/mongo';
 export let Team = new Mongo.Collection('Team');
 export let Tasks = new Mongo.Collection('Tasks');
 export let Tags = new Mongo.Collection('Tags');
+export let GanttCharts = new Mongo.Collection('GanttCharts');
 
 Team.requiredFields = [
   'name'
 ];
 
 Tasks.requiredFields = [
-          'name',
-          'type',
-          'tag',
-          'priority',
-          'assignedTo',
-          'status',
-          'workTime',
-          'openDate',
-          'closeDate',
-          'iteration',
-          'attachement'
-        ];
+  'name',
+  'type',
+  'tag',
+  'priority',
+  'assignedTo',
+  'status',
+  'workTime',
+  'openDate',
+  'closeDate',
+  'iteration',
+  'attachement'
+];
+
+GanttCharts.requiredFields = [
+  'teamId',
+  'taskIds',
+  'start',
+  'end'
+];
 
 
 export let Iterations = calculateIterations();

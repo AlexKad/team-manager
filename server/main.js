@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { Team, Tasks, Tags } from '../imports/collections.js';
+import { Team, Tasks, Tags, GanttCharts } from '../imports/collections.js';
 import './api';
 
 Meteor.startup(() => {
@@ -18,4 +18,12 @@ Meteor.startup(() => {
   })
   Meteor.publish('Tags', ()=> Tags.find());
   Meteor.publish('Team', ()=> Team.find());
+  Meteor.publish('GanttCharts', ()=> {
+    let userId = Meteor.userId();
+    let user = Meteor.users.findOne(userId);
+    let teamId = user? user.info.teamId : null;
+    if(teamId) return Tasks.find({teamId});
+    if(teamId) return GanttCharts.find({teamId});
+    else return [];
+  })
 });

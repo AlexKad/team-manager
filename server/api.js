@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { Tasks, Team, Tags} from '../imports/collections.js';
+import { Tasks, Team, Tags, GanttCharts } from '../imports/collections.js';
 import { statuses } from '../imports/constants.js';
 import _ from 'lodash';
 
@@ -35,6 +35,7 @@ Meteor.methods({
       Tasks.update(taskId, {$set: { iteration: newIter } });
     });
   },
+
   createNewTeam: (teamName)=>{
     let teamId = Team.insert({name: teamName});
     let userId = Meteor.userId();
@@ -66,5 +67,18 @@ Meteor.methods({
     if(!isAdmin) throw new Meteor.Error('This operation allowed only for admin user. Current user is not an admin.');
 
     Meteor.users.update(userId, { $set: { 'info.teamId': '' } });
+  },
+
+  addGanttChart(chart){
+    if(chart._id){
+      GanttCharts.upsert({_id: chart._id}, chart);
+    }
+    else{
+      let userId = Meteor.userId();
+      let user = Meteor.users.findOne(userId);
+      let teamId = user? user.info.teamId : null;
+      chart.teamId = teamId;
+      GanttCharts.insert(chart);
+    }
   }
 });
