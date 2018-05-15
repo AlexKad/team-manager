@@ -4,6 +4,8 @@ import { Tasks, Iterations } from '../../imports/collections.js';
 import { types, statuses, priorities } from '../../imports/constants.js';
 import Task from './task';
 import Dropdown from './dropdown';
+import EditTask from './edit-task';
+import ModalWnd from './modal-wnd';
 import helper from '../../imports/lib.js';
 import _ from 'lodash';
 
@@ -12,9 +14,16 @@ const DATE_BOX_WIDTH = 81;
 class GanttChart extends React.Component{
   constructor(props){
     super(props);
-    this.state = { tasks: [], selectedTasks:[] }
+    this.state = { tasks: [], selectedTasks:[], showEditTaskWindow: false, editTaskId: null }
     this.onChartTaskDrag = this.onChartTaskDrag.bind(this);
     this.setPosition = this.setPosition.bind(this);
+    this.onCloseEditWnd = this.onCloseEditWnd.bind(this);
+  }
+  onEditTask(taskId){
+    this.setState({ editTaskId: taskId, showEditTaskWindow: true});
+  }
+  onCloseEditWnd(){
+    this.setState({ editTaskId: null, showEditTaskWindow: false})
   }
   dateChanged(val, field){
     let { start, end } = this.state;
@@ -58,7 +67,8 @@ class GanttChart extends React.Component{
     let { selectedTasks } = this.state;
     return selectedTasks.map((task,i)=>{
       let width = task.workTime? task.workTime/8*DATE_BOX_WIDTH : DATE_BOX_WIDTH;
-      return <div className='chart-task' key={i} draggable={true} onDragStart={(e)=>this.onChartTaskDrag(e,task)}
+      return <div className='chart-task' key={i} onDoubleClick={(e)=>this.onEditTask(task._id)}
+        draggable={true} onDragStart={(e)=>this.onChartTaskDrag(e,task)}
         style={{ left: task.startInd*DATE_BOX_WIDTH, top: i*40, width }}>
           { task.name }
       </div>
@@ -130,7 +140,7 @@ class GanttChart extends React.Component{
     e.dataTransfer.setData("pos",JSON.stringify(position));
   }
   render(){
-    let { dateError, selectedTasks } = this.state;
+    let { dateError, selectedTasks, showEditTaskWindow, editTaskId } = this.state;
     let chartIsEmpty = !(selectedTasks && selectedTasks.length);
 
     return <div className='gantt-chart'>
@@ -152,6 +162,11 @@ class GanttChart extends React.Component{
           onDrop={this.onTaskDrop.bind(this)}>
           { this.renderTaskList() }
         </div>
+        { showEditTaskWindow?
+          <ModalWnd title='Edit task' onClose={this.onCloseEditWnd}>
+            <EditTask taskId={editTaskId} editDone={this.onCloseEditWnd}/>
+          </ModalWnd> : ''
+        }
     </div>
   }
 }
