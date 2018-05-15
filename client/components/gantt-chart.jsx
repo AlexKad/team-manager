@@ -89,7 +89,7 @@ class GanttChart extends React.Component{
 
     const data = JSON.parse(stringified);
     let selectedTasks = this.state.selectedTasks;
-    if(!_.find(selectedTasks,el=>el._id == data.taskId)){
+    if(!_.find(selectedTasks,el=>el._id == data.taskId || el._id == data._id)){
       let task = _.find(this.state.tasks, el=> el._id == data.taskId);
       task.startInd = start;
       selectedTasks.push(task);
@@ -97,7 +97,7 @@ class GanttChart extends React.Component{
       let tasks = this.state.tasks.filter(el=> el._id != data.taskId);
       this.setState({selectedTasks, tasks});
     }else{
-      let task = _.find(selectedTasks,el=>el._id == data.taskId);
+      let task = _.find(selectedTasks,el=>el._id == data._id);
       task.startInd = start;
       this.setState(selectedTasks);
     }
