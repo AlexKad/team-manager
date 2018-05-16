@@ -17,7 +17,7 @@ class GanttChart extends React.Component{
     super(props);
     this.state = { tasks: [], selectedTasks:[],
       showEditTaskWindow: false, editTaskId: null,
-      showChartsWindow: false }
+      showChartsWindow: false, showTitleInput: false }
     this.onEditTask = this.onEditTask.bind(this);
     this.onCloseEditWnd = this.onCloseEditWnd.bind(this);
     this.onCloseChartWnd = this.onCloseChartWnd.bind(this);
@@ -49,13 +49,26 @@ class GanttChart extends React.Component{
     this.setState(obj);
   }
   saveChart(){
-    let { start, end, selectedTasks } = this.state;
-    let chart = { start, end };
-    chart.taskIds = selectedTasks.map(el=>el._id);
-    Meteor.call('addGanttChart', chart, (err)=>{
-      if (err) { alert('There was an error trying to save chart.'); console.warn(err); }
-      else console.log('saved');
-    });
+    let { start, end, selectedTasks, showTitleInput } = this.state;
+    let title = this.refs.title.value;
+
+    if(showTitleInput && title){
+      let chart = { start, end };
+      chart.taskIds = selectedTasks.map(el=>el._id);
+      chart.title = title;
+      let scope = this;
+      Meteor.call('addGanttChart', chart, (err)=>{
+        if (err) { alert('There was an error trying to save chart.'); console.warn(err); }
+        else {
+          console.log('saved');
+          scope.setState({showTitleInput: false});
+        }
+      });
+    }
+    else{
+      this.setState({showTitleInput: true });
+    }
+
   }
   openChart(){
     this.setState({showChartsWindow: true});
@@ -67,17 +80,25 @@ class GanttChart extends React.Component{
     this.setState({selectedTasks: tasks})
   }
   render(){
-    let { dateError, start, end, showEditTaskWindow, editTaskId, showChartsWindow } = this.state;
+    let { dateError, start, end, editTaskId,
+      showEditTaskWindow, showChartsWindow, showTitleInput } = this.state;
 
     return <div className='gantt-chart'>
-        <div className='input-group'>
-          <label>Start from:</label>
-          <input type='date' onChange={(e)=>this.dateChanged(e.target.value, 'start')}/>
-          <label> till:</label>
-          <input type='date' onChange={(e)=>this.dateChanged(e.target.value, 'end')}/>
-          <span className='error'>{ dateError }</span>
-          <button className='right-btn' onClick={this.openChart}>Open...</button>
-          <button onClick={this.saveChart}>Save</button>
+        <div className='top row'>
+          <div className='date-input-group'>
+            <label>Start from:</label>
+            <input type='date' onChange={(e)=>this.dateChanged(e.target.value, 'start')}/>
+            <label> till:</label>
+            <input type='date' onChange={(e)=>this.dateChanged(e.target.value, 'end')}/>
+            <span className='error'>{ dateError }</span>
+          </div>
+
+          <div className='title-input-group right'>
+            <input placeholder="Enter chart name"  ref="title" className={ showTitleInput? 'visible': ''}/>
+          </div>
+          <button onClick={this.saveChart}>
+            Save </button>
+          <button onClick={this.openChart}>Open...</button>
         </div>
 
         <GanttChartPanel start={start} end={end} onEditTask={this.onEditTask}
