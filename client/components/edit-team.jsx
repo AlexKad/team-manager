@@ -52,14 +52,14 @@ class EditTeam extends React.Component{
         }
     });
   }
-  renderMember(mem,isAdmin){
+  renderMember(mem, isAdmin){
     return <div key={mem.id} className='user'>
       <i className="fa fa-user"/>
       <div className='name'>
         <span>{mem.name}</span>
         <span className='role'>{mem.isAdmin? 'admin' : ''}</span>
       </div>
-      <button className='light-btn'>{ mem.isAdmin? 'remove':'assign'} admin role</button>
+      {isAdmin && <button className='light-btn'>{ mem.isAdmin? 'remove':'assign'} admin role</button> }
       {isAdmin && <i className="action-icon fa fa-times" onClick={()=>this.onRemoveMember(mem.id)}></i> }
     </div>;
   }
@@ -68,7 +68,7 @@ class EditTeam extends React.Component{
     let { team, showInviteWindow } = this.state;
     let teamName = team? team.name: null;
     let isAdmin = user && user.info && user.info.isAdmin;
-    teamUsers = teamUsers.filter((el)=>{ return el.id!=Meteor.userId() });
+    // teamUsers = teamUsers.filter((el)=>{ return el.id!=Meteor.userId() });
 
     return <div className="edit-team">
       { teamName ? <h3>{teamName}</h3> : <span><i>There is no team associated with the current user.</i></span>}

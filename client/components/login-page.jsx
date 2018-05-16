@@ -46,7 +46,7 @@ class _LoginForm extends React.Component {
       onLoading(true);
       Meteor.loginWithPassword(email, password, err => {
         onLoading(false);
-        if (err) this.setState({ error: err.reason });
+        if (err) this.setState({ error: 'Invalid username or password' });
         else this.props.history.push('/dashboard');
       });
     });
