@@ -65,9 +65,10 @@ class SprintDashboard extends React.Component{
     //IDEA: add 'move to the future iteration' button for the to do and in progress items
 
     return <div className='sprint'>
-      <h2>{this.props.iteration}</h2>
+
       <div className='row filters'>
-        <input type='checkbox' onChange={this.filterChanged}/><label>Show only assigned to me</label>
+          <h2>{this.props.iteration}</h2>
+        <input type='checkbox' onChange={this.filterChanged}/><label>only assigned to me</label>
       </div>
       <div className='sprint-dashboard'>
         { this.renderBox('TO DO', 'todo box', statuses.OPEN, todoTasks) }
