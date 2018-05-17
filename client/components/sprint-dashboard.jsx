@@ -49,8 +49,10 @@ class SprintDashboard extends React.Component{
   }
   renderBox(title, styleClass, taskStatus, tasksList){
     return <div className={styleClass} onDragOver={this.onDragOver} onDrop={(e)=> this.onDrop(e, taskStatus)}>
-      <h3>{title}</h3>
-      { tasksList.map(el=> <Task task={el} key={el._id} onEdit={ this.props.onEditTask} allowDrag={true}/>) }
+      <div className="title"><h3>{title}</h3></div>
+      <div className="content">
+        { tasksList.map(el=> <Task task={el} key={el._id} onEdit={ this.props.onEditTask} allowDrag={true}/>) }
+      </div>
     </div>;
   }
   render(){

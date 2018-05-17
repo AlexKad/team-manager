@@ -68,11 +68,13 @@ class PlanSprintBoard extends React.Component{
   }
   renderBox(title, styleClass, iteration, tasksList){
     return <div className={styleClass} onDragOver={this.onDragOver} onDrop={(e)=> this.onDrop(e, iteration)}>
-              <h3>{title}</h3>
-              { tasksList.map(el=>
-                <Task task={el} key={el._id} onEdit={ this.props.onEditTask}
-                  allowDrag={true} onTaskCheck={(taskId, isChecked)=>this.onTaskCheck(taskId, isChecked, iteration)}/>) }
-           </div>
+              <div className="title"><h3>{title}</h3></div>
+              <div className="content">
+                { tasksList.map(el=>
+                  <Task task={el} key={el._id} onEdit={ this.props.onEditTask}
+                    allowDrag={true} onTaskCheck={(taskId, isChecked)=>this.onTaskCheck(taskId, isChecked, iteration)}/>) }
+              </div>
+          </div>
   }
   render(){
     let { tasks } = this.props;
@@ -89,8 +91,8 @@ class PlanSprintBoard extends React.Component{
       <div className='plan-sprint-board' >
         { this.renderBox('Backlog', 'todo box', 'future iterations', backLog)}
         <div className='buttons'>
-          <button onClick={ this.moveToSprint }> -&gt; </button>
-          <button onClick={ this.moveToBacklog }> &lt;- </button>
+          <button onClick={ this.moveToSprint }> <i className="fa fa-long-arrow-left"/> </button>
+          <button onClick={ this.moveToBacklog }> <i className="fa fa-long-arrow-right"/> </button>
         </div>
         { this.renderBox(sprint, 'in-progress box', sprint, currentTasks)}
       </div>
