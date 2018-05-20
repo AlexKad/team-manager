@@ -7,6 +7,7 @@
   }
   .team-list{
     width:500px;
+    background: #fff;
     .user{
       padding: 7px 10px;
       flex-direction: row;
@@ -18,6 +19,9 @@
         text-transform: lowercase;
         width: 160px;
         margin-left: auto;
+       }
+       &:nth-child(even){
+         background: #fff;
        }
        &:nth-child(odd){
          background: #dedede;
@@ -48,4 +52,5 @@
     }
   }
   button{ width: 250px; }
+  button.light-btn { border: 0;}
 }
