@@ -55,7 +55,7 @@ class DashboardPage extends React.Component{
     }
   }
   render(){
-    let { showEditTaskWindow, editTaskId }= this.state;
+    let { showEditTaskWindow, editTaskId, view }= this.state;
     let user = this.props.currentUser;
     const userName = (user && user.info && user.info.name)? user.info.name : 'Profile';
     const isAdmin = user && user.info && user.info.isAdmin;
@@ -75,13 +75,13 @@ class DashboardPage extends React.Component{
           <i className='fa fa-plus-circle'></i>Add new</button>
 
           <div className='row navigation-btn'>
-            <button onClick={()=>this.setState({'view': 'current-sprint'})}>
+            <button onClick={()=>this.setState({'view': 'current-sprint'})} className={view=='current-sprint'? 'active': ''}>
               <i className="fa fa-calendar-o"/>Current Sprint</button>
-            <button onClick={()=>this.setState({'view': 'next-sprint'})}>
+            <button onClick={()=>this.setState({'view': 'next-sprint'})} className={view=='next-sprint'? 'active': ''}>
               <i className="fa fa-calendar" />Plan Next Sprint</button>
-            <button onClick={()=>this.setState({'view': 'team'})}>
+            <button onClick={()=>this.setState({'view': 'team'})} className={view=='team'? 'active': ''}>
               <i className="fa fa-users" />Team & Workload</button>
-            <button onClick={()=>this.setState({'view': 'gantt-chart'})}>
+            <button onClick={()=>this.setState({'view': 'gantt-chart'})} className={view=='gantt-chart'? 'active': ''}>
               <i className="fa fa-bar-chart-o" />Gantt Chart</button>
           </div>
       </div>
