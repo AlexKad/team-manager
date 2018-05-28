@@ -7,7 +7,6 @@ class EditTeam extends React.Component{
   constructor(props){
     super(props);
     this.state={};
-    this.onSave = this.onSave.bind(this);
     this.renderMember = this.renderMember.bind(this);
     this.onRemoveMember = this.onRemoveMember.bind(this);
     this.createNewTeam = this.createNewTeam.bind(this);
@@ -15,14 +14,9 @@ class EditTeam extends React.Component{
     this.state = { team: props.team };
   }
   componentWillReceiveProps(nextProps){
-    if(nextProps.team && !this.state.team){
+    if(nextProps.team != this.state.team){
       this.setState({ team: nextProps.team });
     }
-  }
-  onSave(){
-    let member = { name: this.nameInput.value };
-    //TODO
-    this.nameInput.value = '';
   }
   onInviteUser(){
     let userMail = this.nameInput.value;
@@ -64,11 +58,12 @@ class EditTeam extends React.Component{
     </div>;
   }
   render(){
-    let { teamUsers, user } = this.props;
+    let { teamUsers, user, loading } = this.props;
     let { team, showInviteWindow } = this.state;
     let teamName = team? team.name: null;
     let isAdmin = user && user.info && user.info.isAdmin;
-    // teamUsers = teamUsers.filter((el)=>{ return el.id!=Meteor.userId() });
+
+    if(loading) return null;
 
     return <div className="edit-team">
       { teamName ? <h3>{teamName}</h3> : <span><i>There is no team associated with the current user.</i></span>}
@@ -94,8 +89,12 @@ class EditTeam extends React.Component{
 }
 
 export default withTracker(props=>{
-  Meteor.subscribe('Team');
-  Meteor.subscribe('Meteor.users');
+  let subs = [
+    Meteor.subscribe('Team'),
+    Meteor.subscribe('Meteor.users')
+  ];
+  let loading = !subs.every(sub => sub.ready());
+
   let teamUsers = Meteor.users.find().fetch();
   teamUsers = teamUsers.map(el=>{ return {
     id: el._id,
@@ -107,5 +106,5 @@ export default withTracker(props=>{
   let teamId = user && user.info? user.info.teamId: null;
   let team;
   if(teamId) team = Team.findOne(teamId);
-  return { teamUsers, user, team };
+  return { teamUsers, user, team, loading };
 })(EditTeam)

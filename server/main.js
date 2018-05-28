@@ -7,7 +7,10 @@ Meteor.startup(() => {
     let userId = Meteor.userId();
     let user = Meteor.users.findOne(userId);
     let teamId = user? user.info.teamId : null;
-    return Meteor.users.find({'info.teamId': teamId}, {fields: {info: 1}});
+    if(teamId){
+      return Meteor.users.find({'info.teamId': teamId}, {fields: {info: 1}});
+    }
+    else return Meteor.users.find(userId);
   });
   Meteor.publish('Tasks', ()=> {
     let userId = Meteor.userId();

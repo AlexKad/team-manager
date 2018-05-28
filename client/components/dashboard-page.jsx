@@ -15,7 +15,7 @@ class DashboardPage extends React.Component{
   constructor(props){
     super(props);
     let view = 'current-sprint';
-    if(props.currentUser && !props.currentUser.info.teamId){
+    if(props.currentUser && props.currentUser.info && !props.currentUser.info.teamId){
       view = 'team';
     }
     this.state = { showEditTaskWindow: false, editTaskId: null, view: 'current-sprint' };
@@ -28,7 +28,7 @@ class DashboardPage extends React.Component{
   }
   componentWillReceiveProps(nextProps){
     if(nextProps.currentUser && !this.props.currentUser){
-      let teamExists = nextProps.currentUser.info.teamId;
+      let teamExists = nextProps.currentUser.info && nextProps.currentUser.info.teamId;
       this.setState({view: teamExists? 'current-sprint' : 'team'})
     }
   }
