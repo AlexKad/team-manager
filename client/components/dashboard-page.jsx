@@ -69,6 +69,7 @@ class DashboardPage extends React.Component{
     let user = this.props.currentUser;
     const userName = (user && user.info && user.info.name)? user.info.name : 'Profile';
     const isAdmin = user && user.info && user.info.isAdmin;
+    let teamExists = user && user.info && user.info.teamId;
 
     return <div className='dashboard-page'>
 
@@ -81,7 +82,7 @@ class DashboardPage extends React.Component{
       </div>
 
       <div className='row navigation'>
-        <button className='edit-task-btn' onClick={this.onAddTaskClick}>
+        <button className='edit-task-btn' onClick={this.onAddTaskClick} disabled={teamExists?'' : 'disabled'}>
           <i className='fa fa-plus-circle'></i>Add new</button>
 
           <div className='row navigation-btn'>
