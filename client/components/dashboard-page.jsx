@@ -14,6 +14,10 @@ import { Iterations } from '../../imports/collections.js';
 class DashboardPage extends React.Component{
   constructor(props){
     super(props);
+    let view = 'current-sprint';
+    if(props.currentUser && !props.currentUser.info.teamId){
+      view = 'team';
+    }
     this.state = { showEditTaskWindow: false, editTaskId: null, view: 'current-sprint' };
     this._renderMainView = this._renderMainView.bind(this);
     this.openTaskDetails = this.openTaskDetails.bind(this);
@@ -21,6 +25,12 @@ class DashboardPage extends React.Component{
     this.onEditTask = this.onEditTask.bind(this);
     this.onCloseEditWnd = this.onCloseEditWnd.bind(this);
     this.onlogOut = this.onlogOut.bind(this);
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.currentUser && !this.props.currentUser){
+      let teamExists = nextProps.currentUser.info.teamId;
+      this.setState({view: teamExists? 'current-sprint' : 'team'})
+    }
   }
   openTaskDetails(id){
     this.props.history.push('/details?'+id);
