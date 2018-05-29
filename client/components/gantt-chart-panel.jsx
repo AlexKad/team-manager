@@ -8,7 +8,7 @@ import helper from '../../imports/lib.js';
 import _ from 'lodash';
 
 const DATE_BOX_WIDTH = 81;
-const TASK_HEIGHT = 45;
+const TASK_HEIGHT = 50;
 
 class GanttChartPanel extends React.Component{
   constructor(props){
@@ -72,7 +72,10 @@ class GanttChartPanel extends React.Component{
     if (!stringified) return;
 
     let pos = JSON.parse(e.dataTransfer.getData("pos"));
-    let x = e.clientX - pos.x;
+    let panel = this.refs.chartPanel;
+    let scrollLeft = panel.scrollLeft;
+
+    let x = e.clientX - pos.x + scrollLeft;
     let y = e.clientY - pos.y;
 
     let start = Math.floor(x/DATE_BOX_WIDTH);
@@ -119,6 +122,7 @@ class GanttChartPanel extends React.Component{
   setPosition(e){
     let position = {x: (e.offsetX || e.clientX - $(e.target).offset().left),
                     y: (e.offsetY || e.clientY - $(e.target).offset().top) };
+
     e.dataTransfer.setData("pos",JSON.stringify(position));
   }
   render(){
@@ -126,10 +130,9 @@ class GanttChartPanel extends React.Component{
     let chartIsEmpty = !(selectedTasks && selectedTasks.length);
 
     return <div>
-        <div className='chart-panel'>
+        <div className='chart-panel' ref='chartPanel' onDragOver={ this.onDragOver.bind(this) } onDrop={ this.onChartDrop.bind(this) }>
           { this.renderDates() }
-          <div className={chartIsEmpty? 'empty-chart': 'chart'}
-               onDragOver={ this.onDragOver.bind(this) } onDrop={ this.onChartDrop.bind(this) }>
+          <div className={chartIsEmpty? 'empty-chart': 'chart'}>
             { chartIsEmpty? 'Drag n drop tasks here from the list below.' : this.renderChart() }
           </div>
         </div>
