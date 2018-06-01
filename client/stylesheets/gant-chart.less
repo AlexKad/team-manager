@@ -45,6 +45,23 @@
       margin-left: auto;
     }
     button{ z-index: 5; margin-left:0;}
+    .btn-menu-item{
+      padding: 10px;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 400px;
+      overflow: hidden;
+      cursor: pointer;
+      .interval{
+        margin-left: 20px;
+        font-size: 14px;
+        color: #777;
+      }
+      &:hover{
+        background: #efefef;
+      }
+    }
   }
 
   .chart-panel{

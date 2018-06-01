@@ -1,0 +1,26 @@
+@import './variables';
+
+.menu-btn{
+  position: relative;
+  margin:0;
+
+  &>button{
+    min-width: 100px;
+    margin:0;
+    align-items: center;
+
+    .fa{ margin-left: 10px;}
+  }
+
+  .menu{
+    position: absolute;
+    z-index: 10;
+    right:0;
+    top:37px;
+    min-width: 100px;
+    margin-left: -10000px;
+    background: #fff;
+    border: 2px solid #dedede;
+    opacity: 0.9;
+  }
+}

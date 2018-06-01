@@ -7,6 +7,7 @@ import Dropdown from './dropdown';
 import EditTask from './edit-task';
 import ModalWnd from './modal-wnd';
 import GanttChartPanel from './gantt-chart-panel';
+import MenuButton from './menu-button';
 import helper from '../../imports/lib.js';
 import _ from 'lodash';
 
@@ -68,7 +69,6 @@ class GanttChart extends React.Component{
     else{
       this.setState({showTitleInput: true });
     }
-
   }
   openChart(){
     this.setState({showChartsWindow: true});
@@ -82,6 +82,8 @@ class GanttChart extends React.Component{
   render(){
     let { dateError, start, end, editTaskId,
       showEditTaskWindow, showChartsWindow, showTitleInput } = this.state;
+
+    let { charts } = this.props;
 
     return <div className='gantt-chart'>
         <div className='top row'>
@@ -98,7 +100,17 @@ class GanttChart extends React.Component{
           </div>
           <button onClick={this.saveChart}>
             Save </button>
-          <button onClick={this.openChart}>Open...</button>
+          {/* <button onClick={this.openChart}>Open...</button> */}
+          <MenuButton name='Open'>
+            {charts.map(ch=>{
+              let start = (new Date(ch.start)).toLocaleDateString() || '';
+              let end = (new Date(ch.end)).toLocaleDateString() || '';
+              return <div key={ch._id} className='btn-menu-item'>
+                <span>{ch.title}</span>
+                <span className="interval">{`${start} - ${end}`}</span>
+              </div>
+            })}
+          </MenuButton>
         </div>
 
         <GanttChartPanel start={start} end={end} onEditTask={this.onEditTask}
@@ -124,6 +136,7 @@ export default withTracker(props=>{
   Meteor.subscribe('GanttCharts');
   let user = Meteor.users.findOne({ _id: Meteor.userId() });
   let charts = GanttCharts.find().fetch();
+  console.log(charts);
   return { charts };
 
 })(GanttChart)

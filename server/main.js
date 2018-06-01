@@ -25,7 +25,6 @@ Meteor.startup(() => {
     let userId = Meteor.userId();
     let user = Meteor.users.findOne(userId);
     let teamId = user? user.info.teamId : null;
-    if(teamId) return Tasks.find({teamId});
     if(teamId) return GanttCharts.find({teamId});
     else return [];
   })
