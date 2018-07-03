@@ -16,8 +16,10 @@ export default class Dropdown extends React.Component{
     idField = idField || 'id';
     let options = items.map(el => <option key={el[idField]} value={el[idField]}>{el.name}</option>);
 
-    return <select onChange={this.onChange} value={this.state.selected}>
-      {options}
-    </select>
+    return <div className='dropdown'>
+      <select onChange={this.onChange} value={this.state.selected}>
+        {options}
+      </select>
+    </div>
   }
 }

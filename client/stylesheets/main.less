@@ -19,13 +19,10 @@ input, select, textarea{
   outline: none;
 }
 textarea{ border: 1px solid gray}
-select{
-  width:140px;
-  padding: 10px;
-  font-size: 14px;
-}
+
 input, textarea{
   font-size: 14px;
+  border: 1px solid #ddd;
 }
 button{
   padding: 7px 18px;
@@ -63,3 +60,33 @@ button.light-btn{
 
 div{ display: flex; flex-direction: column; }
 div.row{ flex-direction: row; }
+
+
+select{
+  border: 0;
+  background: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: 14px;
+}
+select::-ms-expand {
+  display: none;
+}
+.dropdown{
+  position: relative;
+  width:140px;
+  border: 1px solid #ddd;
+  display: inline;
+  cursor: pointer;
+  select{ width: ~'calc(100% - 20px)'; }
+  &:after{
+    font-family: FontAwesome;
+    content: '\f0d7';
+    color: #333;
+    position:absolute;
+    right: 11px;
+    top: 5px;
+    padding: 0 0 2px;
+  }
+}
