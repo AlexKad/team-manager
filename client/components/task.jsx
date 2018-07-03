@@ -41,21 +41,35 @@ class Task extends React.Component{
   onCheck(e){
     this.props.onTaskCheck(this.props.task._id, e.target.checked);
   }
+  getPriorityCls(pr){
+    switch(pr){
+      case priorities.HIGH:
+        return "red";
+      case priorities.MEDIUM:
+        return "green";
+      case priorities.LOW:
+        return "blue";
+      default:
+       return "";
+    }
+  }
   render(){
     let {task, teamList, allowDrag, onTaskCheck } = this.props;
-    return <div className='task' draggable={allowDrag} onDragStart={ this.onDrag }>
-      { onTaskCheck? <input type="checkbox" onChange={this.onCheck}/> : ''}
-      <h4> [ {this.renderPriority(task.priority,task.type)} ]
-           { this.renderTag(task.tag) } </h4>
+    let priorityCls=this.getPriorityCls(task.priority);
+    let editFn = this.props.onEdit? ()=>this.props.onEdit(task._id) : ()=>{};
+    let assignee = _.find(teamList, (el)=> el.id == task.assignedTo);
 
-      <h4> { task.name }</h4>
-      <div className='assignedTo'>Assigned to:
+    return <div className={'task ' + priorityCls} onDoubleClick={editFn}
+                draggable={allowDrag} onDragStart={ this.onDrag } >
+      { onTaskCheck? <input type="checkbox" onChange={this.onCheck}/> : ''}
+      <span className='task-type'>[{task.type}]</span>
+      <h4> { this.renderTag(task.tag) } { assignee && assignee.name? assignee.name : 'Not assigned' }</h4>
+      <h4> {task.name}</h4>
+
+      {/* <div className='assignedTo'>Assigned to:
         <Dropdown items={teamList} onChange={this.assignedToChanged} selected={task.assignedTo}/>
-      </div>
+      </div> */}
       <div className='iteration'>{task.iteration}</div>
-      {this.props.onEdit &&
-        <div><i className="edit fa fa-edit" onClick={(e)=>this.props.onEdit(task._id)}></i></div>
-      }
     </div>
   }
 }

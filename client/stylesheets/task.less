@@ -9,19 +9,33 @@
   position: relative;
   padding-right: 25px;
   flex-shrink: 0;
+  position: relative;
+
+  &.red { border-top: 4px solid @orange; }
+  &.green { border-top: 4px solid  green; }
+  &.blue { border-top: 4px solid  @blue; }
 
   h4{
-    margin:7px 0;
-    line-height: 1.3;
+    margin:5px 0;
+    font-weight: 400;
   }
   div{
     flex-direction: row;
     align-items: center;
   }
-  div.dropdown{ display: inline; }
+  div.dropdown{ display: inline; border: 0px; border-bottom: 1px solid #999; paddiong:0}
+
+  .task-type{
+    position: absolute;
+    top:4px;
+    right:4px;
+    color: #2d2d2d;
+    font-size: 12px;
+  }
+
   input[type='checkbox']{
     position: absolute;
-    top:5px;
+    top:18px;
     right:5px;
     font-size: 20px;
   }
@@ -40,7 +54,8 @@
   }
   select { margin-left: 5px; font-size: 16px;}
   .tag{
-    margin: 10px 5px;
+    margin: 5px 0px;
+    margin-right: 5px;
     padding: 2px 5px;
     font-weight: 100;
     color: #fff;
@@ -48,5 +63,10 @@
     background: @blue;
     font-size: 10px;
     text-transform: uppercase;
+  }
+  .iteration{
+    color: #333;
+    font-size: 14px;
+    margin-top:7px;
   }
 }
