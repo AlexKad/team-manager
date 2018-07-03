@@ -136,7 +136,6 @@ export default withTracker(props=>{
   Meteor.subscribe('GanttCharts');
   let user = Meteor.users.findOne({ _id: Meteor.userId() });
   let charts = GanttCharts.find().fetch();
-  console.log(charts);
   return { charts };
 
 })(GanttChart)
