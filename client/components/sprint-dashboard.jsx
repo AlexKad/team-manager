@@ -5,6 +5,7 @@ import { Tasks } from '../../imports/collections.js';
 import { types, statuses, priorities } from '../../imports/constants.js';
 import Task from './task';
 import Dropdown from './dropdown';
+import TaskFilter from './task-filter';
 import _ from 'lodash';
 
 class SprintDashboard extends React.Component{
@@ -13,7 +14,7 @@ class SprintDashboard extends React.Component{
     this.state = { tasks: props.tasks };
     this.onDragOver = this.onDragOver.bind(this);
     this.onDrop = this.onDrop.bind(this);
-    this.filterChanged = this.filterChanged.bind(this);
+    this.filtersChanged = this.filtersChanged.bind(this);
   }
   componentWillReceiveProps(nextProps){
     if(!_.isEqual(this.props.tasks, nextProps.tasks)){
@@ -35,17 +36,13 @@ class SprintDashboard extends React.Component{
 
     e.dataTransfer.clearData();
   }
-  filterChanged(e){
-    let isChecked = e.target.checked;
-    let tasks = this.state.tasks;
-    if(isChecked){
-      let userId = this.props.user._id;
-      tasks = tasks.filter(el=> el.assignedTo == userId);
-      this.setState({tasks});
+  filtersChanged(filters){
+    let tasks = this.props.tasks;
+    for(let i=0; i< filters.length; i++){
+      let filter = filters[i];
+      tasks = tasks.filter(el=> el[filter.name] == filter.value);
     }
-    else{
-      this.setState({ tasks: this.props.tasks });
-    }
+    this.setState({tasks});
   }
   renderBox(title, styleClass, taskStatus, tasksList){
     return <div className={styleClass} onDragOver={this.onDragOver} onDrop={(e)=> this.onDrop(e, taskStatus)}>
@@ -68,7 +65,7 @@ class SprintDashboard extends React.Component{
 
       <div className='row filters'>
           <h2>{this.props.iteration}</h2>
-        <input type='checkbox' onChange={this.filterChanged}/><label>only assigned to me</label>
+          <TaskFilter onFiltersChanged={this.filtersChanged}/>
       </div>
       <div className='sprint-dashboard'>
         { this.renderBox('TO DO', 'todo box', statuses.OPEN, todoTasks) }

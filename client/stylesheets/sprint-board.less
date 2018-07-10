@@ -9,6 +9,7 @@
    -o-background-size: cover;
   background-size: cover;
   background-color: #f4f4f4;
+  overflow: auto;
 
   &>h2{ margin-left:40px; font-weight: 400; }
 
@@ -38,10 +39,12 @@
   .box{
     background: rgba(255,255,255,0.75);
     min-height: 400px;
+    min-width: 400px;
     flex: 1;
     margin-right: 15px;
     &:last-of-type{ margin-right: 0;}
     text-align: center;
+    align-items: center;
 
     .title{
       border-bottom: 4px solid #f4f4f4;
