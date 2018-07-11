@@ -65,7 +65,13 @@ class TaskFilter extends React.Component{
     let selected = [];
     for(let i=0; i< settings.length; i++){
       if(this.state[settings[i]]){
-        selected.push(<div className="row selected" key={settings[i]}>{this.state[settings[i]]}<span onClick={()=>this.removeFilter(settings[i])}>&#10005;</span></div>);
+        let val = '';
+        if(settings[i] == 'assignedTo'){
+          let user = _.find(this.props.teamUsers,(el)=> el.id == this.state[settings[i]]);
+          if(user) val = user.name;
+        }
+        else val = this.state[settings[i]];
+        selected.push(<div className="row selected" key={settings[i]}>{ val }<span onClick={()=>this.removeFilter(settings[i])}>&#10005;</span></div>);
       }
     }
     return selected;
