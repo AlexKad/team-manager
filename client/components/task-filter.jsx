@@ -48,17 +48,16 @@ class TaskFilter extends React.Component{
       }
     }
     this.setState({showPanel: false});
-    this.props.onFiltersChanged(filters);
+    this.props.onFiltersChanged(filters)
   }
   resetFilters(){
-    this.setState({tag: 0, assignedTo: 0, type: 0, priority: 0, showPanel: false});
-    this.props.onFiltersChanged([]);
+    this.setState({tag: 0, assignedTo: 0, type: 0, priority: 0, showPanel: false},
+      ()=>this.props.onFiltersChanged([]));
   }
   removeFilter(name){
     let filter = {};
     filter[name] = 0;
-    this.setState(filter);
-    this.applyFilters();
+    this.setState(filter, ()=> this.applyFilters());
   }
   renderSelected(){
     let settings = ['tag', 'assignedTo', 'type', 'priority'];
