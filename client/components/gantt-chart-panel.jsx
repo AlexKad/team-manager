@@ -51,7 +51,9 @@ class GanttChartPanel extends React.Component{
       return <div className='chart-task' key={i} onDoubleClick={(e)=>this.onEditTask(task._id)}
         draggable={true} onDragStart={(e)=>this.onChartTaskDrag(e,task)}
         style={{ left: task.startInd*DATE_BOX_WIDTH, top: i*TASK_HEIGHT, width }}>
+        {task.tag?
           <div className="row"><span className="tag">{ task.tag }</span>{ _.get(user, 'name', '') }</div>
+          : null}
           <div className="row">{ task.name }</div>
       </div>
     })
