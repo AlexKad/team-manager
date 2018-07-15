@@ -4,6 +4,7 @@ import Dropdown from './dropdown';
 import { Tasks, Iterations, Tags } from '../../imports/collections.js';
 import { types, statuses, priorities } from '../../imports/constants.js';
 import helper from '../helper.js';
+import _ from 'lodash';
 
 class EditTask extends React.Component{
   constructor(props){
@@ -45,11 +46,13 @@ class EditTask extends React.Component{
       priority: task.priority,
       iteration: task.iteration,
       assignedTo: task.assignedTo,
-      workTime: task.workTime
+      workTime: task.workTime,
+      teamId: task.teamId,
+      openDate: task.openDate
     };
   }
   getDefaultTaskData(){
-    let { teamMembers, sprints } = this.props;
+    let { teamMembers, sprints, teamId } = this.props;
     return {
       name: '',
       type: types.TASK,
@@ -57,11 +60,13 @@ class EditTask extends React.Component{
       priority: priorities.MEDIUM,
       iteration: sprints[0].id,
       assignedTo: teamMembers.length? teamMembers[0].id : '',
-      workTime: 4
+      workTime: 4,
+      teamId,
+      openDate: (new Date()).getTime()
     };
   }
   onSave(){
-    let { name, tag, type, priority, assignedTo, iteration, workTime } = this.state;
+    let { name, tag, type, priority, assignedTo, iteration, workTime, teamId, openDate } = this.state;
 
     let task = {
       name: name,
@@ -72,7 +77,9 @@ class EditTask extends React.Component{
       status: statuses.OPEN,
       workTime: workTime,
       iteration: iteration,
-      attachement: null
+      attachement: null,
+      teamId,
+      openDate: openDate || (new Date()).getTime()
     };
     if(this.props.task) task._id = this.props.task._id;
     Meteor.call('addTask', task, (err) => {
@@ -163,10 +170,12 @@ class EditTask extends React.Component{
 export default withTracker(props => {
   let teamMembers = Meteor.users.find().fetch();
   teamMembers = teamMembers.map(el=>{ return {id: el._id, name: el.info.name} });
+  let teamMem = _.get(teamMembers, 0);
+  let teamId = _.get(teamMem, 'info.teamId', null);
   teamMembers.push({id:'', name:''});
   let sprints = Iterations.map(el=> {return { id: el, name: el} });
   let task;
   if(props.taskId) task = Tasks.findOne(props.taskId);
   let allTags = Tags.find().fetch();
-  return { teamMembers, sprints, task, allTags };
+  return { teamMembers, sprints, task, allTags, teamId };
 })(EditTask);

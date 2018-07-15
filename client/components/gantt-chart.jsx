@@ -11,7 +11,7 @@ import MenuButton from './menu-button';
 import helper from '../../imports/lib.js';
 import _ from 'lodash';
 
-const DATE_BOX_WIDTH = 81;
+const DATE_BOX_WIDTH = 121;
 
 class GanttChart extends React.Component{
   constructor(props){

@@ -7,7 +7,8 @@ import Dropdown from './dropdown';
 import helper from '../../imports/lib.js';
 import _ from 'lodash';
 
-const DATE_BOX_WIDTH = 81;
+const DATE_BOX_WIDTH = 121;
+const TASK_BOX_PADDING = 10;
 const TASK_HEIGHT = 50;
 
 class GanttChartPanel extends React.Component{
@@ -44,12 +45,14 @@ class GanttChartPanel extends React.Component{
     let { teamList } = this.props;
     return selectedTasks.map((task,i)=>{
       let width = task.workTime? task.workTime/8*DATE_BOX_WIDTH : DATE_BOX_WIDTH;
+      width = width< DATE_BOX_WIDTH ? DATE_BOX_WIDTH : width;
+      width = width - TASK_BOX_PADDING;
       let user = _.find(teamList, el=> el.id == task.assignedTo, '');
       return <div className='chart-task' key={i} onDoubleClick={(e)=>this.onEditTask(task._id)}
         draggable={true} onDragStart={(e)=>this.onChartTaskDrag(e,task)}
         style={{ left: task.startInd*DATE_BOX_WIDTH, top: i*TASK_HEIGHT, width }}>
+          <div className="row"><span className="tag">{ task.tag }</span>{ _.get(user, 'name', '') }</div>
           <div className="row">{ task.name }</div>
-          <div className="row">{ _.get(user, 'name', '') }</div>
       </div>
     })
   }
