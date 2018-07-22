@@ -86,7 +86,7 @@ class GanttChart extends React.Component{
     let { charts } = this.props;
 
     return <div className='gantt-chart'>
-        <div className='top row'>
+        <div className='top row filters'>
           <div className='date-input-group'>
             <label>Start from:</label>
             <input type='date' onChange={(e)=>this.dateChanged(e.target.value, 'start')}/>

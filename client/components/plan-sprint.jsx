@@ -92,18 +92,21 @@ class PlanSprintBoard extends React.Component{
     this.setState({tasks});
   }
   render(){
+    let {teamExists, onEditTask } = this.props;
     let { tasks, sprint } = this.state;
     let backLog = tasks.filter(el=> el.iteration != sprint);
     let currentTasks = tasks.filter(el=> el.iteration == sprint);
 
     return <div className='plan-sprint'>
-      <div className="row">
+      <div className="row filters">
         <h2>Planning Tasks for
           <i className="fa fa-angle-left" onClick={()=> this.changeSprint(-1)}/>
           {sprint}
           <i className="fa fa-angle-right" onClick={()=> this.changeSprint(+1)}/>
         </h2>
         <TaskFilter onFiltersChanged={this.filtersChanged}/>
+        <button className='edit-task-btn' onClick={()=>onEditTask(null)} disabled={teamExists?'' : 'disabled'}>
+          <i className='fa fa-plus-circle'></i>Add new</button>
       </div>
 
       <div className='plan-sprint-board' >

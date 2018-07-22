@@ -65,12 +65,13 @@
   }
 
   .chart-panel{
-    width:100%;
+    //width:100%;
     min-height: 200px;
     border: 2px solid #2b6f96;
     background-color: #d0e4f2;
-    overflow-x: scroll;
+    //overflow-x: scroll;
     position: relative;
+    overflow: scroll;
 
     .dates{
       flex:1;
@@ -110,10 +111,12 @@
       position: absolute;
       padding: 5px;
       width: 120px;
-      height: 45px;
+      height: 50px;
+      flex-shrink: 0;
       background-color: pink;
       font-size: 14px;
       cursor: pointer;
+      overflow: scroll;
       box-shadow: 1px 2px 5px rgba(0,0,0,0.3);
 
       .tag{
@@ -126,6 +129,7 @@
         background: @blue;
         font-size: 10px;
         text-transform: uppercase;
+        flex-shrink: 0;
       }
     }
   }

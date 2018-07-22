@@ -1,5 +1,6 @@
 .sprint,
 .plan-sprint{
+  width:100%;
   padding: 20px;
   padding-top: 5px;
   flex: 1;
@@ -12,16 +13,6 @@
   overflow: auto;
 
   &>h2{ margin-left:40px; font-weight: 400; }
-
-  .filters{
-    margin-bottom: 20px;
-    font-size: 16px;
-    align-items: center;
-    h2{ margin:0; margin-left:40px; font-weight: 400; }
-    input{
-      margin-left: 25px;
-    }
-  }
   i.fa{ cursor: pointer; }
 }
 .sprint-dashboard,
@@ -38,7 +29,6 @@
 
   .box{
     background: rgba(255,255,255,0.75);
-    min-height: 400px;
     min-width: 400px;
     flex: 1;
     margin-right: 15px;
@@ -47,7 +37,12 @@
     align-items: center;
 
     .title{
+      width: 100%;
       border-bottom: 4px solid #f4f4f4;
+      //background: rgba(62,143,160, .9);
+      //background: #007991;
+      //color: #fff;
+      //border-bottom: 4px solid #007991;
     }
     .content{
       overflow: scroll;

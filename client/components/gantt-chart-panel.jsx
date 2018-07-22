@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 const DATE_BOX_WIDTH = 121;
 const TASK_BOX_PADDING = 10;
-const TASK_HEIGHT = 50;
+const TASK_HEIGHT = 67;
 
 class GanttChartPanel extends React.Component{
   constructor(props){
@@ -61,9 +61,9 @@ class GanttChartPanel extends React.Component{
   renderTaskList(){
     let { start, end } = this.props;
     let { tasks } = this.state;
-    if(!start || !end) return <div className='empty'>Please, select time interval.</div>
+    if(!start || !end) return <div className='empty'>Please, select time interval in the top panel.</div>
     if(!tasks) return <div className='empty'>There are no tasks in the selected time interval.</div>;
-
+    if(tasks.length == 0) return <div className="empty">There are no more tasks in the selected time interval</div>;
     return tasks.map(el=>
       <Task task={el} key={el._id} allowDrag={true} onDrag={this.onTaskDrag.bind(this)}/>
     );

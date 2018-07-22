@@ -53,6 +53,7 @@ class SprintDashboard extends React.Component{
     </div>;
   }
   render(){
+    let {teamExists, onEditTask } = this.props;
     let tasks= this.state.tasks;
 
     let todoTasks = tasks.filter(el=>el.status == statuses.OPEN);
@@ -66,6 +67,8 @@ class SprintDashboard extends React.Component{
       <div className='row filters'>
           <h2>{this.props.iteration}</h2>
           <TaskFilter onFiltersChanged={this.filtersChanged}/>
+          <button className='edit-task-btn' onClick={()=>onEditTask(null)} disabled={teamExists?'' : 'disabled'}>
+            <i className='fa fa-plus-circle'></i>Add new</button>
       </div>
       <div className='sprint-dashboard'>
         { this.renderBox('TO DO', 'todo box', statuses.OPEN, todoTasks) }

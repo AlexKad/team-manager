@@ -1,0 +1,38 @@
+.nav{
+  height: 100%;
+  background: #007991;
+  width:160px;
+  flex-shrink: 0;
+
+  button{
+    margin:0;
+    padding:20px 10px;
+    background: inherit;
+    border:0;
+    flex-shrink: 0;
+    text-align: left;
+    color:#dedede;
+    text-align: center;
+    font-size: 14px;
+
+    &:first-of-type{
+      margin-top:100px;
+    }
+    &.active{
+      background: #036679;
+    }
+    &:hover{
+      background: #036679;
+      color: #fff;
+    }
+
+    i.fa{
+      display: flex;
+      flex-direction: row;
+      font-size: 38px;
+      align-self: center;
+      justify-content: center;
+      margin: 10px 20px;
+    }
+  }
+}

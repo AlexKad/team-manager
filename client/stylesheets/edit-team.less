@@ -1,6 +1,7 @@
 .edit-team{
   flex:1;
   padding: 20px;
+  padding-top: 5px;
   background: url('img/desktop2.jpg') no-repeat center center fixed;
    -webkit-background-size: cover;
    -moz-background-size: cover;
@@ -15,11 +16,12 @@
   }
   .team-list{
     width:500px;
-    background: #fff;
+    background: rgba(255,255,255,0.8);
     .user{
       padding: 7px 10px;
       flex-direction: row;
       align-items: center;
+      // background: rgba(255,255,255,0.8);
       i{ font-size: 18px; color: #52aea2;}
       button.light-btn{
         font-size: 12px;
@@ -28,15 +30,15 @@
         width: 160px;
         margin-left: auto;
        }
-       &:nth-child(even){
-         background: #fff;
-       }
-       &:nth-child(odd){
-         background: #dedede;
-       }
-       .action-icon{
-         margin-left: 10px;;
-       }
+     // &:nth-child(even){
+     //   background: #fff;
+     // }
+     // &:nth-child(odd){
+     //   background: #dedede;
+     // }
+     .action-icon{
+       margin-left: 10px;;
+     }
     }
     .name{
       margin:0 10px;

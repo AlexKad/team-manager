@@ -66,18 +66,22 @@ class EditTeam extends React.Component{
     if(loading) return null;
 
     return <div className="edit-team">
-      { teamName ? <h3>{teamName}</h3> : <span><i>There is no team associated with the current user.</i></span>}
-      { (!teamName && !isAdmin) ? <span><i> Please contact your system administrator.</i></span> : ''}
-      { (!teamName &&  isAdmin) ?  <div className="input-row">
+      <div className="row filters">
+        { teamName ? <h3>{teamName}</h3> : <span><i>There is no team associated with the current user.</i></span>}
+        { (!teamName && !isAdmin) ? <span><i> Please contact your system administrator.</i></span> : ''}
+        { (!teamName &&  isAdmin) ?  <div className="input-row">
                                     <input placeholder='New team' ref={ x=> this.teamNameInput = x }/>
                                     <button onClick={this.createNewTeam}>Create new team</button>
                                   </div> : ''}
+        { teamName && isAdmin ? <button onClick={()=>this.setState({showInviteWindow: !this.state.showInviteWindow})}>
+                                      <i className="fa fa-user"></i> Invite new user
+                                    </button>
+                                  : ''}
+      </div>
+
+
       { teamName ? <div className="team-list">{ teamUsers.map(el=> this.renderMember(el,isAdmin) ) }</div> : '' }
-      { teamName && isAdmin ? <div>
-                                  <button onClick={()=>this.setState({showInviteWindow: !this.state.showInviteWindow})}>
-                                    <i className="fa fa-user"></i> Invite new user
-                                  </button>
-                                </div> : ''}
+
         { showInviteWindow?
           <ModalWnd title='Invite new user' onClose={()=>this.setState({showInviteWindow:false})}>
             <input placeholder="smith@gmail.com" ref={ x=> this.nameInput = x }/>

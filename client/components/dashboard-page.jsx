@@ -8,6 +8,7 @@ import SprintDashboard from './sprint-dashboard';
 import PlanSprintBoard from './plan-sprint';
 import ModalWnd from './modal-wnd';
 import GanttChart from './gantt-chart';
+import Navigation from './navigation';
 import { TabContainer, Tab } from './tab-container';
 import { Iterations } from '../../imports/collections.js';
 
@@ -21,7 +22,6 @@ class DashboardPage extends React.Component{
     this.state = { showEditTaskWindow: false, editTaskId: null, view: 'current-sprint' };
     this._renderMainView = this._renderMainView.bind(this);
     this.openTaskDetails = this.openTaskDetails.bind(this);
-    this.onAddTaskClick = this.onAddTaskClick.bind(this);
     this.onEditTask = this.onEditTask.bind(this);
     this.onCloseEditWnd = this.onCloseEditWnd.bind(this);
     this.onlogOut = this.onlogOut.bind(this);
@@ -34,9 +34,6 @@ class DashboardPage extends React.Component{
   }
   openTaskDetails(id){
     this.props.history.push('/details?'+id);
-  }
-  onAddTaskClick(){
-    this.setState({ editTaskId: null, showEditTaskWindow: true});
   }
   onEditTask(taskId){
     this.setState({ editTaskId: taskId, showEditTaskWindow: true});
@@ -51,11 +48,16 @@ class DashboardPage extends React.Component{
   }
   _renderMainView(){
     let view = this.state.view;
+    let user = this.props.currentUser;
+    const userName = (user && user.info && user.info.name)? user.info.name : 'Profile';
+    const isAdmin = user && user.info && user.info.isAdmin;
+    let teamExists = user && user.info && user.info.teamId;
+
     switch(view){
       case 'current-sprint':
-        return <SprintDashboard iteration={Iterations[0]} onEditTask={ this.onEditTask}></SprintDashboard>;
+        return <SprintDashboard teamExists={teamExists} iteration={Iterations[0]} onEditTask={ this.onEditTask}></SprintDashboard>;
       case 'next-sprint':
-       return <PlanSprintBoard iteration={Iterations[1]} onEditTask={ this.onEditTask}></PlanSprintBoard>;
+       return <PlanSprintBoard teamExists={teamExists} iteration={Iterations[1]} onEditTask={ this.onEditTask}></PlanSprintBoard>;
       case 'team':
         return <EditTeam />;
       case 'gantt-chart':
@@ -71,41 +73,27 @@ class DashboardPage extends React.Component{
     const isAdmin = user && user.info && user.info.isAdmin;
     let teamExists = user && user.info && user.info.teamId;
 
-    return <div className='dashboard-page'>
+    return <div className='row dashboard-page'>
+              <Navigation activeView={this.state.view} onChanged={(active)=>this.setState({view: active})} />
 
-      <div className='top-nav'>
-        <div>Team Task Manager</div>
-        <div className='profile'>
-          <span><i className='fa fa-user-circle' />{userName}</span>
-          <i className='fa fa-sign-out' onClick={this.onlogOut}> </i>
+                {/* <div className='top-nav'>
+                  <div>Team Task Manager</div>
+
+                  <div className='profile'>
+                    <span><i className='fa fa-user-circle' />{userName}</span>
+                    <i className='fa fa-sign-out' onClick={this.onlogOut}> </i>
+                  </div>
+                </div> */}
+              { this._renderMainView() }
+
+
+
+            { showEditTaskWindow?
+              <ModalWnd title={ editTaskId? 'Edit task' : 'Add task'} onClose={this.onCloseEditWnd}>
+                <EditTask taskId={editTaskId} editDone={this.onCloseEditWnd}/>
+              </ModalWnd> : ''
+            }
         </div>
-      </div>
-
-      <div className='row navigation'>
-        <button className='edit-task-btn' onClick={this.onAddTaskClick} disabled={teamExists?'' : 'disabled'}>
-          <i className='fa fa-plus-circle'></i>Add new</button>
-
-          <div className='row navigation-btn'>
-            <button onClick={()=>this.setState({'view': 'current-sprint'})} className={view=='current-sprint'? 'active': ''}>
-              <i className="fa fa-calendar-o"/>Current Sprint</button>
-            <button onClick={()=>this.setState({'view': 'next-sprint'})} className={view=='next-sprint'? 'active': ''}>
-              <i className="fa fa-calendar" />Plan Next Sprint</button>
-            <button onClick={()=>this.setState({'view': 'team'})} className={view=='team'? 'active': ''}>
-              <i className="fa fa-users" />Team & Workload</button>
-            <button onClick={()=>this.setState({'view': 'gantt-chart'})} className={view=='gantt-chart'? 'active': ''}>
-              <i className="fa fa-bar-chart-o" />Gantt Chart</button>
-          </div>
-      </div>
-
-      { this._renderMainView() }
-
-      { showEditTaskWindow?
-        <ModalWnd title={ editTaskId? 'Edit task' : 'Add task'} onClose={this.onCloseEditWnd}>
-          <EditTask taskId={editTaskId} editDone={this.onCloseEditWnd}/>
-        </ModalWnd> : ''
-      }
-
-    </div>;
  }
 }
 
