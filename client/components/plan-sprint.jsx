@@ -75,7 +75,10 @@ class PlanSprintBoard extends React.Component{
   }
   renderBox(title, styleClass, iteration, tasksList){
     return <div className={styleClass} onDragOver={this.onDragOver} onDrop={(e)=> this.onDrop(e, iteration)}>
-              <div className="title"><h3>{title}</h3></div>
+              <div className="title">
+                <h3>{title}</h3>
+                {tasksList.length>0?  <span className="number">{tasksList.length} items</span> : null}
+              </div>
               <div className="content">
                 { tasksList.map(el=>
                   <Task task={el} key={el._id} onEdit={ this.props.onEditTask}

@@ -74,20 +74,17 @@ class DashboardPage extends React.Component{
     let teamExists = user && user.info && user.info.teamId;
 
     return <div className='row dashboard-page'>
-              <Navigation activeView={this.state.view} onChanged={(active)=>this.setState({view: active})} />
+            <Navigation activeView={this.state.view} onChanged={(active)=>this.setState({view: active})} />
 
-                {/* <div className='top-nav'>
-                  <div>Team Task Manager</div>
+              {/* <div className='top-nav'>
+                <div>Team Task Manager</div>
 
-                  <div className='profile'>
-                    <span><i className='fa fa-user-circle' />{userName}</span>
-                    <i className='fa fa-sign-out' onClick={this.onlogOut}> </i>
-                  </div>
-                </div> */}
-              { this._renderMainView() }
-
-
-
+                <div className='profile'>
+                  <span><i className='fa fa-user-circle' />{userName}</span>
+                  <i className='fa fa-sign-out' onClick={this.onlogOut}> </i>
+                </div>
+              </div> */}
+            { this._renderMainView() }
             { showEditTaskWindow?
               <ModalWnd title={ editTaskId? 'Edit task' : 'Add task'} onClose={this.onCloseEditWnd}>
                 <EditTask taskId={editTaskId} editDone={this.onCloseEditWnd}/>
