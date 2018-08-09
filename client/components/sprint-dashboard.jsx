@@ -51,7 +51,7 @@ class SprintDashboard extends React.Component{
         {tasksList.length>0?  <span className="number">{tasksList.length} items</span> : null}
       </div>
       <div className="content">
-        { tasksList.map(el=> <Task task={el} key={el._id} onEdit={ this.props.onEditTask} allowDrag={true}/>) }
+         { tasksList.map(el=> <Task task={el} key={el._id} onEdit={ this.props.onEditTask} allowDrag={true}/>) }
       </div>
     </div>;
   }
