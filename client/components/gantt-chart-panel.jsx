@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 const DATE_BOX_WIDTH = 121;
 const TASK_BOX_PADDING = 10;
-const TASK_HEIGHT = 67;
+const TASK_HEIGHT = 82;
 
 class GanttChartPanel extends React.Component{
   constructor(props){
@@ -135,7 +135,8 @@ class GanttChartPanel extends React.Component{
     let chartIsEmpty = !(selectedTasks && selectedTasks.length);
 
     return <div>
-        <div className='chart-panel' ref='chartPanel' onDragOver={ this.onDragOver.bind(this) } onDrop={ this.onChartDrop.bind(this) }>
+        <div className='chart-panel' ref='chartPanel' style={{height: selectedTasks.length*TASK_HEIGHT+100+'px'}}
+        onDragOver={ this.onDragOver.bind(this) } onDrop={ this.onChartDrop.bind(this) }>
           { this.renderDates() }
           <div className={chartIsEmpty? 'empty-chart': 'chart'}>
             { chartIsEmpty? 'Drag n drop tasks here from the list below.' : this.renderChart() }

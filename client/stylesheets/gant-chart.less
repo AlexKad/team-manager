@@ -9,7 +9,7 @@
    -o-background-size: cover;
   background-size: cover;
   background-color: #f4f4f4;
-  overflow: hidden;
+  overflow-y: scroll;
 
   .top.row{
     padding: 5px;
@@ -66,11 +66,10 @@
   }
 
   .chart-panel{
-    //width:100%;
+    flex-shrink: 0;
     min-height: 200px;
     border: 2px solid #2b6f96;
     background-color: #d0e4f2;
-    //overflow-x: scroll;
     position: relative;
     overflow: scroll;
 
@@ -112,8 +111,7 @@
       position: absolute;
       padding: 5px;
       width: 120px;
-      height: 50px;
-      flex-shrink: 0;
+      height: 70px;
       background-color: pink;
       font-size: 14px;
       cursor: pointer;
@@ -132,6 +130,9 @@
         text-transform: uppercase;
         flex-shrink: 0;
       }
+
+      & > .row{ flex-shrink: 0; align-items: center;}
+      & > .row + .row{ overflow: scroll;}
     }
   }
   .error{
@@ -142,6 +143,7 @@
   .tasks{
     width: 820px;
     min-height: 100px;
+    flex-shrink: 0;
     overflow-y: scroll;
     margin: 10px 0;
     padding: 5px;
@@ -153,12 +155,7 @@
       color: @blue_dark;
     }
     .task{
-      // flex-direction: row;
-      // align-items: center;
       opacity: 1;
-
-      //h4,div { margin:0 10px;}
-      //.assignedTo { margin-left: auto; }
     }
   }
 }
